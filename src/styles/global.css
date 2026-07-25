@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  /* Neutrals */
+  --color-ink-lightest: #f2f2f2;
+  --color-ink-lighter: #d8d8d8;
+  --color-ink-light: #b2b2b2;
+  --color-ink-base: #7f7f7f;
+  --color-ink-dark: #4c4c4c;
+  --color-ink-darker: #191919;
+  --color-ink-darkest: #000000;
+
+  /* Primary - Resolution Blue */
+  --color-brand-lightest: #e5e9f1;
+  --color-brand-lighter: #ccd3e3;
+  --color-brand-light: #4c679f;
+  --color-brand-base: #002676;
+  --color-brand-dark: #001e5e;
+  --color-brand-darker: #000f2f;
+  --color-brand-darkest: #000b23;
+
+  /* Secondary - Sun */
+  --color-sun-lightest: #fef7e7;
+  --color-sun-lighter: #fef0d0;
+  --color-sun-light: #fdcb5b;
+  --color-sun-base: #fdb515;
+  --color-sun-dark: #ca9010;
+  --color-sun-darker: #654808;
+  --color-sun-darkest: #4b3606;
+
+  /* Accent */
+  --color-cream: #f7f1e3;
+
+  /* Type */
+  --font-heading: "Nanum Gothic", sans-serif;
+  --font-body: "Nunito Sans", sans-serif;
+
+  /* Bento cards */
+  --radius-bento: 20px;
+  --radius-bento-soft: 28px;
+  --shadow-bento: 0 10px 24px rgba(25, 25, 25, 0.08);
+  --shadow-bento-soft: 0 18px 44px rgba(25, 25, 25, 0.14);
+}
+
+@layer base {
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink-darker);
+    font-family: var(--font-body);
+  }
+
+  a {
+    color: var(--color-brand-base);
+  }
+
+  a:hover {
+    color: var(--color-brand-dark);
+  }
+
+  .hd {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+}
+
+@layer components {
+  .page-container {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding: 0 56px 100px;
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      padding: 0 20px 64px;
+    }
+  }
+
+  .bento {
+    border: 2px solid var(--color-ink-darker);
+    border-radius: var(--radius-bento);
+    box-shadow: var(--shadow-bento);
+  }
+
+  .bento-soft {
+    border: none;
+    border-radius: var(--radius-bento-soft);
+    box-shadow: var(--shadow-bento-soft);
+  }
+
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .pill-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .tag-pill {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+}

@@ -1,0 +1,58 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ImagePlaceholder from "@/components/ImagePlaceholder";
+import Button from "@/components/Button";
+import EventRow from "@/components/EventRow";
+import CTAPanel from "@/components/CTAPanel";
+import { nextEvent, upcomingEvents, pastEvents } from "@/data/events";
+---
+
+<Layout title="Events" description="Live sessions on AI strategy, tooling, and orchestration.">
+  <section class="mt-5">
+    <div class="hd text-sm text-brand-base">Events</div>
+    <div class="hd mt-1.5 text-[40px]">Workshops &amp; Events</div>
+    <p class="m-0 mt-2 max-w-[560px] text-base text-ink-dark">
+      Live sessions on AI strategy, tooling, and orchestration — for teams and individuals.
+    </p>
+  </section>
+
+  <!-- NEXT UP -->
+  <section class="mt-7">
+    <div class="bento grid grid-cols-1 overflow-hidden bg-sun-lightest lg:grid-cols-[1fr_1.2fr]">
+      <ImagePlaceholder label={nextEvent.imageLabel} className="h-[240px] lg:h-full" />
+      <div class="flex flex-col justify-center gap-3.5 p-11">
+        <span class="tag-pill w-fit bg-sun-base text-ink-darker">Next Up</span>
+        <div class="hd text-[28px]">{nextEvent.title}</div>
+        <p class="m-0 text-[15px] leading-relaxed text-ink-dark">{nextEvent.description}</p>
+        <div class="text-sm font-bold text-ink-dark">{nextEvent.dateTime}</div>
+        <Button href="#" variant="primary" className="w-fit">Register</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPCOMING -->
+  <section class="mt-8">
+    <div class="hd mb-4 text-[22px]">Upcoming</div>
+    <div class="flex flex-col gap-3.5">
+      {upcomingEvents.map((event) => <EventRow {...event} variant="upcoming" />)}
+    </div>
+  </section>
+
+  <!-- PAST -->
+  <section class="mt-8">
+    <div class="hd mb-4 text-[22px]">Past Events</div>
+    <div class="flex flex-col gap-3.5">
+      {pastEvents.map((event) => <EventRow {...event} variant="past" />)}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mt-10">
+    <CTAPanel
+      title="Want a private session for your team?"
+      description="We'll tailor a workshop to where your team actually is."
+      buttonLabel="Book a Call"
+      buttonHref="/#contact"
+    />
+  </section>
+</Layout>
