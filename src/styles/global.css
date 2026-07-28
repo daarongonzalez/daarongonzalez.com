@@ -90,6 +90,25 @@
     box-shadow: var(--shadow-bento-soft);
   }
 
+  /* Minimal card treatment (homepage v2) — borderless/hairline, grows radius on hover */
+  .card {
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(25, 25, 25, 0.07);
+    transition: border-radius 0.35s ease;
+  }
+
+  .card:hover {
+    border-radius: 36px;
+  }
+
+  .card-static:hover {
+    border-radius: 16px;
+  }
+
+  .card-bordered {
+    border: 1px solid rgba(25, 25, 25, 0.15);
+  }
+
   .pill-btn {
     display: inline-flex;
     align-items: center;

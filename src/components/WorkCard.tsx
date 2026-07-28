@@ -2,11 +2,18 @@ import ImagePlaceholder from "./ImagePlaceholder";
 import TagPill from "./TagPill";
 import type { Project } from "@/data/projects";
 
-export default function WorkCard({ project }: { project: Project }) {
+interface WorkCardProps {
+  project: Project;
+  fixedWidth?: boolean;
+}
+
+export default function WorkCard({ project, fixedWidth = true }: WorkCardProps) {
   return (
     <a
       href={`/work/${project.slug}`}
-      className="bento flex w-[340px] flex-none flex-col overflow-hidden text-inherit no-underline"
+      className={`card card-bordered flex flex-col overflow-hidden text-inherit no-underline ${
+        fixedWidth ? "w-[340px] flex-none" : "w-full"
+      }`}
     >
       <ImagePlaceholder label={project.imageLabel} className="h-[200px]" />
       <div className="flex flex-col gap-2 p-5">
