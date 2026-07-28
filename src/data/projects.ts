@@ -79,15 +79,15 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    slug: "nsa-hawaii",
-    title: "NSA Hawaii",
+    slug: "arvori",
+    title: "Arvori",
     shortDescription:
       "AI powered account agency management platform for client management and sales.",
     tags: [
       { label: "CMS", tone: "sun" },
       { label: "Membership", tone: "sun" },
     ],
-    imageLabel: "NSA Hawaii screenshot",
+    imageLabel: "Arvori screenshot",
     featured: true,
   },
 ];

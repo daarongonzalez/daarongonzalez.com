@@ -1,11 +1,11 @@
-import GradCapIcon from "./GradCapIcon";
-import CompassIcon from "./CompassIcon";
-import BracketsIcon from "./BracketsIcon";
+import EducatorIcon from "./EducatorIcon";
+import StrategistIcon from "./StrategistIcon";
+import DeveloperIcon from "./DeveloperIcon";
 
 export const icons = {
-  "grad-cap": GradCapIcon,
-  compass: CompassIcon,
-  brackets: BracketsIcon,
+  educator: EducatorIcon,
+  strategist: StrategistIcon,
+  developer: DeveloperIcon,
 } as const;
 
 export type IconName = keyof typeof icons;

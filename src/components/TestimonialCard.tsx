@@ -8,7 +8,7 @@ interface TestimonialCardProps {
 
 export default function TestimonialCard({ quote, name, role }: TestimonialCardProps) {
   return (
-    <div className="bento flex flex-col justify-center gap-4 bg-white p-10">
+    <div className="card card-bordered flex flex-col justify-center gap-4 bg-cream p-10">
       <div className="text-4xl leading-none text-sun-base">&ldquo;</div>
       <p className="m-0 text-lg leading-relaxed text-ink-darker italic">{quote}</p>
       <div className="mt-2 flex items-center gap-3">

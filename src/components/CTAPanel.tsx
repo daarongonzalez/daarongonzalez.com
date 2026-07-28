@@ -6,6 +6,7 @@ interface CTAPanelProps {
   buttonLabel: string;
   buttonHref: string;
   layout?: "compact" | "banner";
+  surface?: "bento" | "card";
 }
 
 export default function CTAPanel({
@@ -14,10 +15,11 @@ export default function CTAPanel({
   buttonLabel,
   buttonHref,
   layout = "banner",
+  surface = "bento",
 }: CTAPanelProps) {
   if (layout === "compact") {
     return (
-      <div className="bento flex flex-col justify-center gap-4 bg-brand-base p-10 text-white">
+      <div className={`${surface} flex flex-col justify-center gap-4 bg-brand-base p-10 text-white`}>
         <div className="hd text-2xl">{title}</div>
         <p className="m-0 text-[15px] leading-relaxed text-brand-lighter">{description}</p>
         <Button href={buttonHref} variant="accent" className="justify-center">
@@ -28,7 +30,7 @@ export default function CTAPanel({
   }
 
   return (
-    <div className="bento flex flex-wrap items-center justify-between gap-5 bg-brand-base p-10 text-white">
+    <div className={`${surface} flex flex-wrap items-center justify-between gap-5 bg-brand-base p-10 text-white`}>
       <div>
         <div className="hd text-2xl">{title}</div>
         <p className="m-0 mt-1.5 text-[15px] text-brand-lighter">{description}</p>
