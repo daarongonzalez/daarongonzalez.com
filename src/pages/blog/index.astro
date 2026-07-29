@@ -2,11 +2,11 @@
 import Layout from "@/layouts/Layout.astro";
 import FeaturedBlogCard from "@/components/FeaturedBlogCard";
 import BlogFilter from "@/components/BlogFilter";
-import Button from "@/components/Button";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/sanity";
 
-const featuredPost = posts.find((post) => post.featured);
-const gridPosts = posts.filter((post) => !post.featured);
+const posts = await getAllPosts();
+const featuredPost = posts.find((post) => post.featured) ?? posts[0];
+const gridPosts = posts.filter((post) => post._id !== featuredPost?._id);
 ---
 
 <Layout title="Blog" description="Thoughts on AI strategy, education, and building without shortcuts.">
@@ -28,7 +28,7 @@ const gridPosts = posts.filter((post) => !post.featured);
     <BlogFilter posts={gridPosts} client:load />
   </section>
 
-  <section class="mt-8 flex justify-center">
-    <Button href="#" variant="secondary">Load More</Button>
-  </section>
+  {posts.length === 0 && (
+    <p class="mt-6 text-center text-ink-base">No posts published yet — check back soon.</p>
+  )}
 </Layout>

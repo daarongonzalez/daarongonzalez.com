@@ -5,6 +5,8 @@ import TagPill from "@/components/TagPill";
 import { ProblemSolution, Gallery, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
 import { projects, getAdjacentProjects, type Project } from "@/data/projects";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
 }

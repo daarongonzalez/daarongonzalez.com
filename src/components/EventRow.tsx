@@ -1,12 +1,13 @@
 import Button from "./Button";
 
 interface EventRowProps {
+  slug: string;
   title: string;
   date: string;
   variant?: "upcoming" | "past";
 }
 
-export default function EventRow({ title, date, variant = "upcoming" }: EventRowProps) {
+export default function EventRow({ slug, title, date, variant = "upcoming" }: EventRowProps) {
   const isPast = variant === "past";
   return (
     <div
@@ -19,11 +20,11 @@ export default function EventRow({ title, date, variant = "upcoming" }: EventRow
         <div className="mt-1 text-[13px] text-ink-base">{date}</div>
       </div>
       {isPast ? (
-        <a href="#" className="text-sm font-bold">
-          Watch recap →
+        <a href={`/events/${slug}`} className="text-sm font-bold">
+          View recap →
         </a>
       ) : (
-        <Button href="#" variant="secondary">
+        <Button href={`/events/${slug}`} variant="secondary">
           Register
         </Button>
       )}
