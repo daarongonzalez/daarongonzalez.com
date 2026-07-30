@@ -6,7 +6,7 @@ export default function FeaturedBlogCard({ post }: { post: SanityPost }) {
   return (
     <a
       href={`/blog/${post.slug}`}
-      className="bento grid grid-cols-1 overflow-hidden text-inherit no-underline sm:grid-cols-[1.1fr_1fr]"
+      className="bento grid grid-cols-1 overflow-hidden bg-cream text-inherit no-underline sm:grid-cols-[1.1fr_1fr]"
     >
       {post.coverImage ? (
         <img

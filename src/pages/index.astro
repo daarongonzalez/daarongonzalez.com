@@ -4,29 +4,51 @@ import Button from "@/components/Button";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import ServiceCard from "@/components/ServiceCard";
 import StatTile from "@/components/StatTile";
-import WorkSection from "@/components/WorkSection";
-import TestimonialCard from "@/components/TestimonialCard";
+import SectionRail from "@/components/SectionRail.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import WorkCard from "@/components/WorkCard";
+import HomeBlogCard from "@/components/HomeBlogCard";
+import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
-import DotGrid from "@/components/DotGrid";
-import { services, aboutStats, hero, testimonials } from "@/data/site";
+import { services, aboutStats, hero, reviewSets } from "@/data/site";
 import { projects } from "@/data/projects";
+import { getAllPosts } from "@/lib/sanity";
 
 const featuredProjects = projects.filter((project) => project.featured);
+const recentPosts = (await getAllPosts()).slice(0, 2);
+const blogTones = ["sun", "blue"] as const;
 ---
 
-<Layout title="AI Education Consultant" background="white">
+<Layout title="AI Education Consultant">
   <!-- HERO -->
   <section class="mt-5">
-    <div class="card card-bordered card-static grid grid-cols-1 overflow-hidden bg-cream lg:grid-cols-[1fr_2fr]">
-      <div class="flex flex-col justify-center gap-5 p-14">
-        <div class="hd text-[44px] leading-[1.05]">{hero.headline}</div>
-        <p class="m-0 text-base leading-relaxed text-ink-dark">{hero.body}</p>
-        <div class="mt-2 flex flex-col items-start gap-3">
-          <Button href="#contact" variant="primary">Book a Call</Button>
-          <Button href="#work" variant="secondary">See my work</Button>
+    <div class="bento bento-hero grid min-h-[520px] grid-cols-1 overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]">
+      <div class="relative flex flex-col justify-center gap-6 overflow-hidden bg-brand-base p-8 text-cream sm:px-14 sm:py-16">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+          <div class="absolute -right-[90px] -top-[110px] h-[340px] w-[340px] rounded-full bg-sun-base opacity-[.09]"></div>
+          <div class="absolute -bottom-[160px] -left-[140px] h-[420px] w-[420px] rounded-full bg-cream opacity-[.05]"></div>
+          <div class="absolute -bottom-[70px] right-[60px] h-[220px] w-[220px] rounded-full border-2 border-sun-base opacity-[.16]"></div>
+          <div class="absolute -top-[60px] left-[180px] h-[160px] w-[160px] rounded-full border-2 border-cream opacity-10"></div>
+        </div>
+        <div class="relative flex flex-col gap-6">
+          <div class="text-[12.5px] font-bold uppercase tracking-[.2em] text-sun-base">{hero.eyebrow}</div>
+          <div class="hd text-[clamp(44px,5.6vw,82px)] leading-[.88] tracking-[-.025em]">
+            {hero.lines.map((line) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+            <span class="text-sun-base">{hero.goldWord}</span>
+          </div>
+          <p class="m-0 max-w-[420px] text-[17px] leading-[1.55] text-brand-lighter">{hero.body}</p>
+          <div class="mt-1 flex flex-wrap gap-3">
+            <Button href="#contact" variant="accent">Book a Call</Button>
+            <Button href="#work" variant="outline-light">See my work</Button>
+          </div>
         </div>
       </div>
-      <div class="overflow-hidden">
+      <div class="overflow-hidden bg-cream-deep">
         <ImagePlaceholder label="Headshot photo" className="h-full min-h-[280px]" />
       </div>
     </div>
@@ -34,14 +56,14 @@ const featuredProjects = projects.filter((project) => project.featured);
 
   <!-- SERVICES -->
   <section class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
-    {services.map((service) => <ServiceCard {...service} />)}
+    {services.map((service, i) => <ServiceCard number={`0${i + 1}`} {...service} />)}
   </section>
 
   <!-- ABOUT STRIP -->
-  <section id="about" class="mt-6">
-    <div class="card grid grid-cols-1 items-center gap-8 bg-brand-base p-12 text-white sm:grid-cols-2">
+  <section id="about" class="mt-10 flex flex-col gap-[18px]">
+    <SectionRail label="01 / ABOUT" linkLabel="Full story →" linkHref="/about" />
+    <div class="bento grid grid-cols-1 items-center gap-8 bg-brand-base p-12 text-white sm:grid-cols-2">
       <div class="flex flex-col gap-3.5">
-        <div class="hd text-sm text-sun-base">About</div>
         <p class="m-0 text-[19px] leading-relaxed">
           I've spent my career at the intersection of design, code, and teaching — helping teams
           turn AI from a buzzword into a working system they actually own.
@@ -55,26 +77,72 @@ const featuredProjects = projects.filter((project) => project.featured);
   </section>
 
   <!-- WORK -->
-  <section id="work" class="mt-10">
-    <WorkSection projects={featuredProjects} client:load />
+  <section id="work" class="mt-14 flex flex-col gap-8">
+    <div class="flex flex-col gap-[18px]">
+      <SectionRail label="02 / WORK" linkLabel="View all →" linkHref="#work" />
+      <SectionHeading heading="Work I've done" blurb="A few of the builds I've taken clients through, start to ship.">
+        <div class="flex gap-3.5">
+          <button
+            id="work-scroll-left"
+            type="button"
+            aria-label="Scroll work row left"
+            class="cursor-pointer text-[22px] font-bold leading-none text-sun-base transition-[color,transform] duration-200 hover:-translate-x-0.5 hover:text-brand-base"
+          >
+            ←
+          </button>
+          <button
+            id="work-scroll-right"
+            type="button"
+            aria-label="Scroll work row right"
+            class="cursor-pointer text-[22px] font-bold leading-none text-sun-base transition-[color,transform] duration-200 hover:translate-x-0.5 hover:text-brand-base"
+          >
+            →
+          </button>
+        </div>
+      </SectionHeading>
+    </div>
+    <div id="work-row" class="flex flex-nowrap gap-6 overflow-x-auto pb-2" style="scroll-behavior: smooth">
+      {featuredProjects.map((project) => <WorkCard project={project} />)}
+    </div>
   </section>
 
-  <!-- TESTIMONIAL + CTA -->
-  <section id="contact" class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-    <TestimonialCard {...testimonials[0]} />
+  <!-- BLOG -->
+  {recentPosts.length > 0 && (
+    <section id="blog" class="mt-14 flex flex-col gap-8">
+      <div class="flex flex-col gap-[18px]">
+        <SectionRail label="03 / BLOG" linkLabel="All posts →" linkHref="/blog" />
+        <SectionHeading heading="Writing & notes" blurb="Thoughts on AI strategy, education, and building without shortcuts." />
+      </div>
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {recentPosts.map((post, i) => <HomeBlogCard post={post} tone={blogTones[i % 2]} />)}
+      </div>
+    </section>
+  )}
+
+  <!-- PRAISE -->
+  <ReviewBand sets={reviewSets} client:load />
+
+  <!-- CTA -->
+  <section id="contact" class="mt-10">
     <CTAPanel
       title="Ready to talk?"
       description="Let's find the right path for your team's AI implementation."
       buttonLabel="Book a Call"
       buttonHref="#contact"
-      layout="compact"
-      surface="card"
+      tone="cream"
+      padding="p-12"
+      headingClassName="text-[40px] leading-none"
+      descriptionClassName="text-base"
     />
   </section>
-
-  <!-- TESTIMONIAL 2 -->
-  <section class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
-    <DotGrid client:visible />
-    <TestimonialCard {...testimonials[1]} />
-  </section>
 </Layout>
+
+<script>
+  const row = document.getElementById("work-row");
+  document.getElementById("work-scroll-left")?.addEventListener("click", () => {
+    row?.scrollBy({ left: -364, behavior: "smooth" });
+  });
+  document.getElementById("work-scroll-right")?.addEventListener("click", () => {
+    row?.scrollBy({ left: 364, behavior: "smooth" });
+  });
+</script>

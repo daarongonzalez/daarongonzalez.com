@@ -1,0 +1,35 @@
+---
+interface Props {
+  label: string;
+  variant?: "primary" | "sub";
+  linkLabel?: string;
+  linkHref?: string;
+  counterText?: string;
+}
+
+const { label, variant = "primary", linkLabel, linkHref, counterText } = Astro.props;
+const isPrimary = variant === "primary";
+---
+
+<div class={`flex items-center gap-5 ${isPrimary ? "" : "mb-4"}`}>
+  <div
+    class={`whitespace-nowrap font-bold tracking-[.18em] text-brand-base ${
+      isPrimary ? "text-[13px]" : "text-xs"
+    }`}
+  >
+    {label}
+  </div>
+  <div class={`flex-1 bg-sun-base ${isPrimary ? "h-1" : "h-0.5"}`}></div>
+  {
+    linkLabel && linkHref && (
+      <a href={linkHref} class="whitespace-nowrap text-sm font-bold">
+        {linkLabel}
+      </a>
+    )
+  }
+  {
+    counterText && (
+      <div class="whitespace-nowrap text-[13px] font-bold tracking-[.14em] text-ink-base">{counterText}</div>
+    )
+  }
+</div>

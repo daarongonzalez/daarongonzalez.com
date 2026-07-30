@@ -26,7 +26,7 @@ export default function BlogFilter({ posts: gridPosts }: { posts: SanityPost[] }
             type="button"
             onClick={() => setActive(category)}
             className={`bento cursor-pointer px-5 py-2.5 text-[13px] font-bold ${
-              active === category ? "bg-brand-base text-white" : "bg-white text-ink-darker"
+              active === category ? "bg-brand-base text-white" : "bg-cream text-ink-darker"
             }`}
           >
             {category}

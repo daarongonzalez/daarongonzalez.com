@@ -9,7 +9,7 @@ export default function TimelineCard({ number, title, description, highlight }: 
   return (
     <div
       className={`bento flex flex-col gap-2 p-7 ${
-        highlight ? "bg-brand-base text-white" : "bg-white text-ink-darker"
+        highlight ? "bg-brand-base text-white" : "bg-cream text-ink-darker"
       }`}
     >
       <div className={`hd text-[13px] ${highlight ? "text-sun-base" : "text-brand-base"}`}>{number}</div>

@@ -7,30 +7,26 @@ export const navLinks = [
 
 export const services = [
   {
-    icon: "educator" as const,
-    swatch: "bg-brand-lightest",
     title: "Educator",
     description:
       "Live workshops and on-demand content that turn your staff into confident, independent contributors.",
   },
   {
-    icon: "strategist" as const,
-    swatch: "bg-sun-lighter",
     title: "Strategist",
     description:
       "Design sprints that establish your system and brand standards, so every build starts on solid ground.",
   },
   {
-    icon: "developer" as const,
-    swatch: "bg-brand-lightest",
     title: "Developer",
     description: "Robust, scalable applications solving real problems. No shortcuts, no technical debt.",
   },
 ];
 
 export const hero = {
-  headline: "Create Your AI Playbook",
-  body: "D'Aaron here, stoked you've read this far. Getting to it I help you and your team identify where AI tools make sense and where they are a time sync. I've been in technical training for years and would love to help your business thrive. Let's chat!",
+  eyebrow: "AI enablement · training · builds",
+  lines: ["Create", "your AI"],
+  goldWord: "playbook",
+  body: "D'Aaron here. I help you and your team find where AI tools actually pay off — and where they quietly waste a quarter. Years in technical training, and I'd love to help your business thrive.",
 };
 
 export const aboutStats = [
@@ -38,18 +34,31 @@ export const aboutStats = [
   { value: "30+", label: "Teams trained" },
 ];
 
-export const testimonials = [
+export interface Review {
+  lead?: string;
+  body: string;
+  name: string;
+  role: string;
+}
+
+export interface ReviewPair {
+  primary: Review;
+  secondary: Review;
+}
+
+export const reviewSets: ReviewPair[] = [
   {
-    quote:
-      "D'Aaron was incredibly helpful in walking me through what it would take to turn my idea into a real product. Very easy to work with! I highly recommend him.",
-    name: "Jackson McKenna",
-    role: "Owner",
-  },
-  {
-    quote:
-      "I'll definitely vouch and say it was a breath of fresh share to have the chance to meet someone that not only understands A.I, but can explain it in a way that resonates. It's super rare to come across an educator that genuinely wants you to win and enthusiastically shows up in 1:1 meetings ready to help you build, create and solve problems. D'Aaron has been instrumental in 10x-ing my A.I education and I'm better because of the knowledge that has been passed down to me.",
-    name: "Zack Fore",
-    role: "AI Consultant",
+    primary: {
+      lead: "Not only understands AI, but explains it in a way that resonates.",
+      body: "It's rare to come across an educator that genuinely wants you to win and enthusiastically shows up in 1:1 meetings ready to help you build, create and solve problems. D'Aaron has been instrumental in 10x-ing my AI education.",
+      name: "Zack Fore",
+      role: "AI Consultant",
+    },
+    secondary: {
+      body: "D'Aaron was incredibly helpful in walking me through what it would take to turn my idea into a real product. Very easy to work with — I highly recommend him.",
+      name: "Jackson McKenna",
+      role: "Owner, Two If By Sea",
+    },
   },
 ];
 

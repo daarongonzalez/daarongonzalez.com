@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import TagPill from "@/components/TagPill";
+import SectionRail from "@/components/SectionRail.astro";
 import { ProblemSolution, Gallery, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
 import { projects, getAdjacentProjects, type Project } from "@/data/projects";
 
@@ -21,13 +22,13 @@ const cs = project.caseStudy;
 
   <!-- HERO -->
   <section class="mt-4">
-    <div class="bento flex flex-col gap-4 bg-white p-11">
+    <div class="bento flex flex-col gap-4 bg-cream p-11">
       {project.tags.length > 0 && (
         <div class="flex gap-2">
           {project.tags.map((tag) => <TagPill label={tag.label} tone={tag.tone} />)}
         </div>
       )}
-      <div class="hd text-[42px]">{project.title}</div>
+      <div class="hd text-[64px] leading-[.9] tracking-[-.02em]">{project.title}</div>
       <p class="m-0 max-w-[640px] text-[17px] leading-relaxed text-ink-dark">
         {cs?.description ?? project.shortDescription}
       </p>
@@ -45,7 +46,11 @@ const cs = project.caseStudy;
         solutionLabel={cs.solutionLabel}
         solution={cs.solution}
       />
-      <Gallery images={cs.gallery} />
+      <section class="mt-6">
+        <SectionRail label="02 / PROCESS" variant="sub" />
+        <div class="hd mb-5 text-[40px] leading-[.92]">Process &amp; screens</div>
+        <Gallery images={cs.gallery} />
+      </section>
       <ResultsStrip results={cs.results} />
     </>
   )}

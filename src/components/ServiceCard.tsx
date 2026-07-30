@@ -1,21 +1,17 @@
-import { icons, type IconName } from "./icons";
-
 interface ServiceCardProps {
-  icon: IconName;
-  swatch: string;
+  number: string;
   title: string;
   description: string;
 }
 
-export default function ServiceCard({ icon, swatch, title, description }: ServiceCardProps) {
-  const Icon = icons[icon];
+export default function ServiceCard({ number, title, description }: ServiceCardProps) {
   return (
-    <div className="card card-bordered flex flex-col gap-3 bg-cream p-8">
-      <div className={`flex h-12 w-12 items-center justify-center rounded-[14px] ${swatch}`}>
-        <Icon />
+    <div className="bento group relative flex min-h-[250px] flex-col justify-end gap-3 overflow-hidden bg-cream p-8 text-ink-darker transition-[background-color,border-radius,border-color] duration-200 ease-out hover:border-sun-base hover:bg-sun-base">
+      <div className="hd absolute -top-[22px] right-1.5 text-[110px] leading-none text-brand-base opacity-[.16] transition-opacity duration-200 ease-out group-hover:opacity-100">
+        {number}
       </div>
-      <div className="hd text-xl">{title}</div>
-      <p className="m-0 text-[14.5px] leading-relaxed text-ink-dark">{description}</p>
+      <div className="hd text-[26px]">{title}</div>
+      <p className="m-0 text-[14.5px] leading-relaxed opacity-80">{description}</p>
     </div>
   );
 }

@@ -2,6 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import Button from "@/components/Button";
+import SectionRail from "@/components/SectionRail.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
 import EventRow from "@/components/EventRow";
 import CTAPanel from "@/components/CTAPanel";
 import { getAllEvents, urlFor } from "@/lib/sanity";
@@ -18,12 +20,12 @@ const pastEvents = events
 ---
 
 <Layout title="Events" description="Live sessions on AI strategy, tooling, and orchestration.">
-  <section class="mt-5">
-    <div class="hd text-sm text-brand-base">Events</div>
-    <div class="hd mt-1.5 text-[40px]">Workshops &amp; Events</div>
-    <p class="m-0 mt-2 max-w-[560px] text-base text-ink-dark">
-      Live sessions on AI strategy, tooling, and orchestration — for teams and individuals.
-    </p>
+  <section class="mt-5 flex flex-col gap-[18px]">
+    <SectionRail label="01 / EVENTS" linkLabel="← Home" linkHref="/" />
+    <SectionHeading
+      heading="Workshops & events"
+      blurb="Live sessions on AI strategy, tooling, and orchestration — for teams and individuals."
+    />
   </section>
 
   {nextEvent && (
@@ -52,7 +54,8 @@ const pastEvents = events
   )}
 
   <section class="mt-8">
-    <div class="hd mb-4 text-[22px]">Upcoming</div>
+    <SectionRail label="02 / UPCOMING" variant="sub" />
+    <div class="hd mb-5 text-[40px] leading-[.92]">Upcoming</div>
     <div class="flex flex-col gap-3.5">
       {restUpcoming.map((event) => (
         <EventRow slug={event.slug} title={event.title} date={formatDate(event.startsAt)} variant="upcoming" />
@@ -64,7 +67,8 @@ const pastEvents = events
   </section>
 
   <section class="mt-8">
-    <div class="hd mb-4 text-[22px]">Past Events</div>
+    <SectionRail label="03 / ARCHIVE" variant="sub" />
+    <div class="hd mb-5 text-[40px] leading-[.92]">Past events</div>
     <div class="flex flex-col gap-3.5">
       {pastEvents.map((event) => (
         <EventRow slug={event.slug} title={event.title} date={formatDate(event.startsAt)} variant="past" />
@@ -79,6 +83,9 @@ const pastEvents = events
       description="We'll tailor a workshop to where your team actually is."
       buttonLabel="Book a Call"
       buttonHref="/#contact"
+      padding="p-10"
+      headingClassName="text-[22px]"
+      descriptionClassName="text-[14.5px]"
     />
   </section>
 </Layout>

@@ -18,6 +18,7 @@
   --color-brand-dark: #001e5e;
   --color-brand-darker: #000f2f;
   --color-brand-darkest: #000b23;
+  --color-brand-meta: #8fa0c8;
 
   /* Secondary - Sun */
   --color-sun-lightest: #fef7e7;
@@ -30,21 +31,16 @@
 
   /* Accent */
   --color-cream: #f7f1e3;
+  --color-cream-deep: #ede7d8;
 
   /* Type */
   --font-heading: "Nanum Gothic", sans-serif;
   --font-body: "Nunito Sans", sans-serif;
-
-  /* Bento cards */
-  --radius-bento: 20px;
-  --radius-bento-soft: 28px;
-  --shadow-bento: 0 10px 24px rgba(25, 25, 25, 0.08);
-  --shadow-bento-soft: 0 18px 44px rgba(25, 25, 25, 0.14);
 }
 
 @layer base {
   body {
-    background: var(--color-cream);
+    background: #ffffff;
     color: var(--color-ink-darker);
     font-family: var(--font-body);
   }
@@ -78,35 +74,21 @@
     }
   }
 
+  /* Card base — hairline border, grows radius on hover */
   .bento {
-    border: 2px solid var(--color-ink-darker);
-    border-radius: var(--radius-bento);
-    box-shadow: var(--shadow-bento);
-  }
-
-  .bento-soft {
-    border: none;
-    border-radius: var(--radius-bento-soft);
-    box-shadow: var(--shadow-bento-soft);
-  }
-
-  /* Minimal card treatment (homepage v2) — borderless/hairline, grows radius on hover */
-  .card {
+    border: 1px solid rgba(25, 25, 25, 0.15);
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(25, 25, 25, 0.07);
     transition: border-radius 0.35s ease;
   }
 
-  .card:hover {
+  .bento:hover {
     border-radius: 36px;
   }
 
-  .card-static:hover {
+  /* Hero card is exempt from the hover radius grow */
+  .bento-hero:hover {
     border-radius: 16px;
-  }
-
-  .card-bordered {
-    border: 1px solid rgba(25, 25, 25, 0.15);
   }
 
   .pill-btn {

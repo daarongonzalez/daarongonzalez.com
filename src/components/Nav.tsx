@@ -6,7 +6,7 @@ export default function Nav({ currentPath = "" }: { currentPath?: string }) {
   const [open, setOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href === "/#work") return false;
+    if (href === "/#work") return currentPath.startsWith("/work");
     return currentPath === href || (href === "/" && currentPath === "");
   };
 
@@ -51,7 +51,7 @@ export default function Nav({ currentPath = "" }: { currentPath?: string }) {
       </button>
 
       {open && (
-        <div className="bento absolute inset-x-5 top-24 z-20 flex flex-col gap-5 bg-white p-6 md:hidden">
+        <div className="bento absolute inset-x-5 top-24 z-20 flex flex-col gap-5 bg-cream p-6 md:hidden">
           {navLinks.map((link) => (
             <a
               key={link.href}

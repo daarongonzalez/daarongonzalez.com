@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import SectionRail from "@/components/SectionRail.astro";
 import TimelineCard from "@/components/TimelineCard";
 import ApproachCard from "@/components/ApproachCard";
 import CTAPanel from "@/components/CTAPanel";
@@ -9,33 +10,39 @@ import { timeline, approach } from "@/data/site";
 
 <Layout title="About" description="Educator, strategist, developer — in that order.">
   <!-- INTRO -->
-  <section class="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.2fr]">
-    <div class="bento overflow-hidden">
-      <ImagePlaceholder label="D'Aaron, working photo" className="h-full min-h-[280px]" />
-    </div>
-    <div class="bento flex flex-col justify-center gap-4 bg-sun-lightest p-12">
-      <div class="hd text-sm text-sun-dark">About Me</div>
-      <div class="hd text-[38px] leading-tight">Educator, strategist, developer — in that order.</div>
-      <p class="m-0 text-base leading-relaxed text-ink-dark">
-        I've spent my career at the intersection of design, code, and teaching. Before AI made
-        "orchestration" a buzzword, I was already helping teams build systems they could actually
-        understand and own — not just tools they rented. Today I run design sprints, ship full
-        builds, and train teams to carry the work forward without me.
-      </p>
+  <section class="mt-5 flex flex-col gap-6">
+    <SectionRail label="01 / ABOUT" linkLabel="← Home" linkHref="/" />
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.2fr]">
+      <div class="bento overflow-hidden">
+        <ImagePlaceholder label="D'Aaron, working photo" className="h-full min-h-[280px]" />
+      </div>
+      <div class="bento flex flex-col justify-center gap-4 bg-sun-lightest p-12">
+        <div class="hd text-[52px] leading-[.92] tracking-[-.02em]">
+          Educator, strategist, developer — in that order.
+        </div>
+        <p class="m-0 text-base leading-relaxed text-ink-dark">
+          I've spent my career at the intersection of design, code, and teaching. Before AI made
+          "orchestration" a buzzword, I was already helping teams build systems they could actually
+          understand and own — not just tools they rented. Today I run design sprints, ship full
+          builds, and train teams to carry the work forward without me.
+        </p>
+      </div>
     </div>
   </section>
 
   <!-- TIMELINE -->
-  <section class="mt-6">
-    <div class="hd mb-4 text-2xl">How I Got Here</div>
+  <section class="mt-8">
+    <SectionRail label="02 / PATH" variant="sub" />
+    <div class="hd mb-5 text-[40px] leading-[.92]">How I got here</div>
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {timeline.map((step) => <TimelineCard {...step} />)}
     </div>
   </section>
 
   <!-- APPROACH -->
-  <section class="mt-6">
-    <div class="hd mb-4 text-2xl">How I Work</div>
+  <section class="mt-8">
+    <SectionRail label="03 / METHOD" variant="sub" />
+    <div class="hd mb-5 text-[40px] leading-[.92]">How I work</div>
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {approach.map((item) => <ApproachCard {...item} />)}
     </div>

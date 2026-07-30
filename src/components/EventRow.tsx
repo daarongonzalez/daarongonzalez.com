@@ -11,7 +11,7 @@ export default function EventRow({ slug, title, date, variant = "upcoming" }: Ev
   const isPast = variant === "past";
   return (
     <div
-      className={`bento flex flex-wrap items-center justify-between gap-3 bg-white px-7 ${
+      className={`bento flex flex-wrap items-center justify-between gap-3 bg-cream px-7 ${
         isPast ? "py-5 opacity-75" : "py-[22px]"
       }`}
     >
