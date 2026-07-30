@@ -28,16 +28,13 @@ export function ProblemSolution({
 
 export function Gallery({ images }: { images: string[] }) {
   return (
-    <section className="mt-6">
-      <div className="hd mb-4 text-[22px]">Process &amp; Screens</div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {images.map((label) => (
-          <div key={label} className="bento overflow-hidden">
-            <ImagePlaceholder label={label} className="h-[220px]" />
-          </div>
-        ))}
-      </div>
-    </section>
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      {images.map((label) => (
+        <div key={label} className="bento overflow-hidden">
+          <ImagePlaceholder label={label} className="h-[220px]" />
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -61,7 +58,7 @@ export function PrevNextNav({ previous, next }: { previous?: Project; next?: Pro
   return (
     <section className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
       {previous ? (
-        <a href={`/work/${previous.slug}`} className="bento flex flex-col gap-1 bg-white p-6 text-inherit no-underline">
+        <a href={`/work/${previous.slug}`} className="bento flex flex-col gap-1 bg-cream p-6 text-inherit no-underline">
           <div className="text-xs font-bold text-ink-base">← PREVIOUS</div>
           <div className="hd text-lg">{previous.title}</div>
         </a>
@@ -71,7 +68,7 @@ export function PrevNextNav({ previous, next }: { previous?: Project; next?: Pro
       {next ? (
         <a
           href={`/work/${next.slug}`}
-          className="bento flex flex-col items-end gap-1 bg-white p-6 text-right text-inherit no-underline"
+          className="bento flex flex-col items-end gap-1 bg-cream p-6 text-right text-inherit no-underline"
         >
           <div className="text-xs font-bold text-ink-base">NEXT →</div>
           <div className="hd text-lg">{next.title}</div>

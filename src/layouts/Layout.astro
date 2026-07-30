@@ -6,13 +6,11 @@ import "@/styles/global.css";
 interface Props {
   title: string;
   description?: string;
-  background?: "cream" | "white";
 }
 
 const {
   title,
   description = "AI education consultant — design sprints, builds, and workshops that stick.",
-  background = "cream",
 } = Astro.props;
 
 const currentPath = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
@@ -34,7 +32,7 @@ const currentPath = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replac
       rel="stylesheet"
     />
   </head>
-  <body class={background === "white" ? "bg-white" : "bg-cream"}>
+  <body>
     <div class="page-container">
       <Nav currentPath={currentPath} client:load />
       <main>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  heading: string;
+  blurb?: string;
+}
+
+const { heading, blurb } = Astro.props;
+---
+
+<div class="mt-[18px] flex flex-wrap items-end justify-between gap-8">
+  <div class="hd max-w-[620px] text-[clamp(36px,7vw,72px)] leading-[.88] tracking-[-.02em]">{heading}</div>
+  <div class="flex flex-col items-end gap-4 pb-1.5">
+    {blurb && <p class="m-0 max-w-[260px] text-[15px] leading-relaxed text-ink-dark">{blurb}</p>}
+    <slot />
+  </div>
+</div>
