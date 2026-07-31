@@ -1,3 +1,6 @@
+import zackFore from "@/assets/images/zack-fore.jpg";
+import jacksonMcKenna from "@/assets/images/jackson-mckenna.jpg";
+
 export const navLinks = [
   { label: "About", href: "/about" },
   { label: "Work", href: "/#work" },
@@ -39,6 +42,7 @@ export interface Review {
   body: string;
   name: string;
   role: string;
+  avatar?: string;
 }
 
 export interface ReviewPair {
@@ -53,11 +57,13 @@ export const reviewSets: ReviewPair[] = [
       body: "It's rare to come across an educator that genuinely wants you to win and enthusiastically shows up in 1:1 meetings ready to help you build, create and solve problems. D'Aaron has been instrumental in 10x-ing my AI education.",
       name: "Zack Fore",
       role: "AI Consultant",
+      avatar: zackFore.src,
     },
     secondary: {
       body: "D'Aaron was incredibly helpful in walking me through what it would take to turn my idea into a real product. Very easy to work with — I highly recommend him.",
       name: "Jackson McKenna",
       role: "Owner, Two If By Sea",
+      avatar: jacksonMcKenna.src,
     },
   },
 ];

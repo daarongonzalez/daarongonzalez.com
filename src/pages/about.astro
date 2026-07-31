@@ -1,11 +1,11 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
 import SectionRail from "@/components/SectionRail.astro";
 import TimelineCard from "@/components/TimelineCard";
 import ApproachCard from "@/components/ApproachCard";
 import CTAPanel from "@/components/CTAPanel";
 import { timeline, approach } from "@/data/site";
+import aboutPhoto from "@/assets/images/about-photo.jpg";
 ---
 
 <Layout title="About" description="Educator, strategist, developer — in that order.">
@@ -14,7 +14,13 @@ import { timeline, approach } from "@/data/site";
     <SectionRail label="01 / ABOUT" linkLabel="← Home" linkHref="/" />
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.2fr]">
       <div class="bento overflow-hidden">
-        <ImagePlaceholder label="D'Aaron, working photo" className="h-full min-h-[280px]" />
+        <img
+          src={aboutPhoto.src}
+          width={aboutPhoto.width}
+          height={aboutPhoto.height}
+          alt="D'Aaron Gonzalez, working"
+          class="h-full min-h-[280px] w-full object-cover"
+        />
       </div>
       <div class="bento flex flex-col justify-center gap-4 bg-sun-lightest p-12">
         <div class="hd text-[52px] leading-[.92] tracking-[-.02em]">

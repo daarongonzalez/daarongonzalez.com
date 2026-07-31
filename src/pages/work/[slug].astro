@@ -34,7 +34,15 @@ const cs = project.caseStudy;
       </p>
     </div>
     <div class="bento mt-6 overflow-hidden">
-      <ImagePlaceholder label={cs?.heroImageLabel ?? project.imageLabel} className="h-[480px]" />
+      {cs?.heroImage ? (
+        <img
+          src={cs.heroImage}
+          alt={cs.heroImageLabel}
+          class="h-[480px] w-full object-cover"
+        />
+      ) : (
+        <ImagePlaceholder label={cs?.heroImageLabel ?? project.imageLabel} className="h-[480px]" />
+      )}
     </div>
   </section>
 

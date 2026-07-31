@@ -1,5 +1,20 @@
 import { useState } from "react";
-import type { ReviewPair } from "@/data/site";
+import type { Review, ReviewPair } from "@/data/site";
+
+function Avatar({ review, size }: { review: Review; size: number }) {
+  const style = { width: size, height: size };
+  if (review.avatar) {
+    return (
+      <img
+        src={review.avatar}
+        alt={review.name}
+        style={style}
+        className="flex-none rounded-full object-cover"
+      />
+    );
+  }
+  return <div style={style} className="flex-none rounded-full bg-cream/[.14]" />;
+}
 
 export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
   const [index, setIndex] = useState(0);
@@ -27,7 +42,7 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
             <div className="hd text-[34px] leading-[1.12] tracking-tight">{primary.lead}</div>
             <p className="m-0 text-[15px] leading-relaxed text-brand-lighter">{primary.body}</p>
             <div className="mt-0.5 flex items-center gap-3">
-              <div className="h-[52px] w-[52px] flex-none rounded-full bg-cream/[.14]" />
+              <Avatar review={primary} size={52} />
               <div>
                 <div className="text-[15px] font-bold">{primary.name}</div>
                 <div className="text-[13px] text-brand-meta">{primary.role}</div>
@@ -39,7 +54,7 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
             <div className="text-xs font-bold tracking-[.18em] text-sun-base">ALSO SAID</div>
             <p className="m-0 text-base leading-relaxed text-cream-deep">{secondary.body}</p>
             <div className="mt-0.5 flex items-center gap-3">
-              <div className="h-11 w-11 flex-none rounded-full bg-cream/[.14]" />
+              <Avatar review={secondary} size={44} />
               <div>
                 <div className="text-sm font-bold">{secondary.name}</div>
                 <div className="text-[12.5px] text-brand-meta">{secondary.role}</div>
