@@ -8,7 +8,11 @@ export default function WorkCard({ project }: { project: Project }) {
       href={`/work/${project.slug}`}
       className="bento flex w-[340px] flex-none flex-col overflow-hidden bg-cream text-inherit no-underline"
     >
-      <ImagePlaceholder label={project.imageLabel} className="h-[200px]" />
+      {project.image ? (
+        <img src={project.image} alt={project.imageLabel} className="h-[200px] w-full object-cover" />
+      ) : (
+        <ImagePlaceholder label={project.imageLabel} className="h-[200px]" />
+      )}
       <div className="flex flex-col gap-2 p-5">
         <div className="hd text-lg">{project.title}</div>
         <p className="m-0 text-sm leading-relaxed text-ink-dark">{project.shortDescription}</p>

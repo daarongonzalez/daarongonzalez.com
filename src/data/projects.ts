@@ -1,3 +1,9 @@
+import rapidschemaThumb from "@/assets/images/rapidschema-thumb.png";
+import socialscouterThumb from "@/assets/images/socialscouter-thumb.png";
+import arvoriThumb from "@/assets/images/arvori-thumb.png";
+import rapidschemaHero from "@/assets/images/rapidschema-hero.png";
+import rapidschemaSchemaEditor from "@/assets/images/rapidschema-schema-editor.png";
+
 export interface ProjectTag {
   label: string;
   tone: "blue" | "sun";
@@ -8,22 +14,29 @@ export interface ProjectStat {
   label: string;
 }
 
+export interface GalleryImage {
+  label: string;
+  src?: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
   shortDescription: string;
   tags: ProjectTag[];
   imageLabel: string;
+  image?: string;
   /** Show on the homepage "Work" row. */
   featured: boolean;
   caseStudy?: {
     description: string;
     heroImageLabel: string;
+    heroImage?: string;
     problemLabel: string;
     problem: string;
     solutionLabel: string;
     solution: string;
-    gallery: string[];
+    gallery: GalleryImage[];
     results: ProjectStat[];
   };
 }
@@ -47,18 +60,24 @@ export const projects: Project[] = [
       { label: "Development", tone: "blue" },
     ],
     imageLabel: "RapidSchema screenshot",
+    image: rapidschemaThumb.src,
     featured: true,
     caseStudy: {
       description:
         "Custom SEO tooling for a large e-commerce platform, built to streamline schema markup workflows across thousands of product pages.",
       heroImageLabel: "RapidSchema hero screenshot",
+      heroImage: rapidschemaHero.src,
       problemLabel: "The Problem",
       problem:
         "Schema markup was managed by hand across a sprawling product catalog — slow, error-prone, and impossible to scale as SKUs grew.",
       solutionLabel: "The Solution",
       solution:
         "A custom tool that generates, validates, and deploys structured data automatically, giving the SEO team a single dashboard to manage it all.",
-      gallery: ["Dashboard screen", "Schema editor screen", "Validation report screen"],
+      gallery: [
+        { label: "Dashboard screen" },
+        { label: "Schema editor screen", src: rapidschemaSchemaEditor.src },
+        { label: "Validation report screen" },
+      ],
       results: [
         { value: "92%", label: "Faster markup turnaround" },
         { value: "10k+", label: "Product pages covered" },
@@ -76,6 +95,7 @@ export const projects: Project[] = [
       { label: "Development", tone: "blue" },
     ],
     imageLabel: "SocialScouter screenshot",
+    image: socialscouterThumb.src,
     featured: true,
   },
   {
@@ -88,6 +108,7 @@ export const projects: Project[] = [
       { label: "Membership", tone: "sun" },
     ],
     imageLabel: "Arvori screenshot",
+    image: arvoriThumb.src,
     featured: true,
   },
 ];

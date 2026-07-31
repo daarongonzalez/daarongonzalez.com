@@ -1,5 +1,5 @@
 import ImagePlaceholder from "./ImagePlaceholder";
-import type { Project, ProjectStat } from "@/data/projects";
+import type { GalleryImage, Project, ProjectStat } from "@/data/projects";
 
 export function ProblemSolution({
   problemLabel,
@@ -26,12 +26,16 @@ export function ProblemSolution({
   );
 }
 
-export function Gallery({ images }: { images: string[] }) {
+export function Gallery({ images }: { images: GalleryImage[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-      {images.map((label) => (
-        <div key={label} className="bento overflow-hidden">
-          <ImagePlaceholder label={label} className="h-[220px]" />
+      {images.map((image) => (
+        <div key={image.label} className="bento overflow-hidden">
+          {image.src ? (
+            <img src={image.src} alt={image.label} className="h-[220px] w-full object-cover" />
+          ) : (
+            <ImagePlaceholder label={image.label} className="h-[220px]" />
+          )}
         </div>
       ))}
     </div>
