@@ -19,7 +19,7 @@ const recentPosts = (await getAllPosts()).slice(0, 2);
 const blogTones = ["sun", "blue"] as const;
 ---
 
-<Layout title="AI Education Consultant">
+<Layout title="AI Education Consultant" showLoadingScreen>
   <!-- HERO -->
   <section class="mt-5">
     <div class="bento bento-hero grid min-h-[520px] grid-cols-1 overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]">

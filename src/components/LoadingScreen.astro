@@ -1,0 +1,83 @@
+---
+---
+
+<div id="dg-loading-screen" class="dg-loading-screen" hidden>
+  <div class="dg-loading-mark hd">D</div>
+</div>
+
+<style>
+  .dg-loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-brand-base);
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  .dg-loading-screen--hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .dg-loading-mark {
+    color: var(--color-sun-base);
+    font-size: 56px;
+    line-height: 1;
+    animation: dg-loading-pulse 1.1s ease-in-out infinite;
+  }
+
+  @keyframes dg-loading-pulse {
+    0%,
+    100% {
+      opacity: 0.45;
+      transform: scale(0.92);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dg-loading-mark {
+      animation: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var el = document.getElementById("dg-loading-screen");
+    if (!el) return;
+
+    if (!window.__dgFirstVisit) {
+      el.remove();
+      return;
+    }
+
+    el.hidden = false;
+    document.documentElement.classList.add("dg-loading-lock");
+
+    var hide = function () {
+      el.classList.add("dg-loading-screen--hide");
+      document.documentElement.classList.remove("dg-loading-lock");
+      setTimeout(function () {
+        el.remove();
+      }, 400);
+    };
+
+    var minTime = new Promise(function (resolve) {
+      setTimeout(resolve, 600);
+    });
+    var pageLoad = new Promise(function (resolve) {
+      if (document.readyState === "complete") resolve();
+      else window.addEventListener("load", resolve, { once: true });
+    });
+
+    Promise.all([minTime, pageLoad]).then(hide);
+  })();
+</script>
