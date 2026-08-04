@@ -39,6 +39,10 @@
 }
 
 @layer base {
+  html.dg-loading-lock {
+    overflow: hidden;
+  }
+
   body {
     background: #ffffff;
     color: var(--color-ink-darker);
