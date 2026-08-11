@@ -1,7 +1,12 @@
 import zackFore from "@/assets/images/zack-fore.jpg";
 import jacksonMcKenna from "@/assets/images/jackson-mckenna.jpg";
 
-export const navLinks = [
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+export const navLinks: NavLink[] = [
   { label: "About", href: "/about" },
   { label: "Work", href: "/#work" },
   { label: "Blog", href: "/blog" },

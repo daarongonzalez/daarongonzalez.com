@@ -4,8 +4,26 @@ import SectionRail from "@/components/SectionRail.astro";
 import TimelineCard from "@/components/TimelineCard";
 import ApproachCard from "@/components/ApproachCard";
 import CTAPanel from "@/components/CTAPanel";
-import { timeline, approach } from "@/data/site";
+import { timeline as defaultTimeline, approach as defaultApproach } from "@/data/site";
+import { getSiteSettings } from "@/lib/sanity";
+import { pick } from "@/lib/content";
 import aboutPhoto from "@/assets/images/about-photo.jpg";
+
+const settings = await getSiteSettings();
+const timeline = pick(settings?.timeline, defaultTimeline);
+const approach = pick(settings?.approach, defaultApproach);
+const aboutIntro = {
+  heading: pick(settings?.aboutIntro?.heading, "Educator, strategist, developer — in that order."),
+  body: pick(
+    settings?.aboutIntro?.body,
+    "I've spent my career at the intersection of design, code, and teaching. Before AI made \"orchestration\" a buzzword, I was already helping teams build systems they could actually understand and own — not just tools they rented. Today I run design sprints, ship full builds, and train teams to carry the work forward without me.",
+  ),
+};
+const aboutCta = {
+  title: pick(settings?.aboutCta?.title, "Let's build something together."),
+  description: pick(settings?.aboutCta?.description, "Design sprints, full builds, or team training — let's talk."),
+  buttonLabel: pick(settings?.aboutCta?.buttonLabel, "Book a Call"),
+};
 ---
 
 <Layout title="About" description="Educator, strategist, developer — in that order.">
@@ -24,13 +42,10 @@ import aboutPhoto from "@/assets/images/about-photo.jpg";
       </div>
       <div class="bento flex flex-col justify-center gap-4 bg-sun-lightest p-12">
         <div class="hd text-[52px] leading-[.92] tracking-[-.02em]">
-          Educator, strategist, developer — in that order.
+          {aboutIntro.heading}
         </div>
         <p class="m-0 text-base leading-relaxed text-ink-dark">
-          I've spent my career at the intersection of design, code, and teaching. Before AI made
-          "orchestration" a buzzword, I was already helping teams build systems they could actually
-          understand and own — not just tools they rented. Today I run design sprints, ship full
-          builds, and train teams to carry the work forward without me.
+          {aboutIntro.body}
         </p>
       </div>
     </div>
@@ -57,9 +72,9 @@ import aboutPhoto from "@/assets/images/about-photo.jpg";
   <!-- CTA -->
   <section class="mt-10">
     <CTAPanel
-      title="Let's build something together."
-      description="Design sprints, full builds, or team training — let's talk."
-      buttonLabel="Book a Call"
+      title={aboutCta.title}
+      description={aboutCta.description}
+      buttonLabel={aboutCta.buttonLabel}
       buttonHref="/#contact"
     />
   </section>
