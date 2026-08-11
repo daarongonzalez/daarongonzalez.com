@@ -9,14 +9,52 @@ import WorkCard from "@/components/WorkCard";
 import HomeBlogCard from "@/components/HomeBlogCard";
 import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
-import { services, aboutStats, hero, reviewSets } from "@/data/site";
+import {
+  services as defaultServices,
+  aboutStats as defaultAboutStats,
+  hero as defaultHero,
+  reviewSets as defaultReviewSets,
+} from "@/data/site";
 import { projects } from "@/data/projects";
-import { getAllPosts } from "@/lib/sanity";
+import { getAllPosts, getSiteSettings } from "@/lib/sanity";
+import { pick, mergeReviewSets } from "@/lib/content";
 import heroHeadshot from "@/assets/images/hero-headshot.jpg";
 
 const featuredProjects = projects.filter((project) => project.featured);
 const recentPosts = (await getAllPosts()).slice(0, 2);
 const blogTones = ["sun", "blue"] as const;
+
+const settings = await getSiteSettings();
+const hero = {
+  eyebrow: pick(settings?.hero?.eyebrow, defaultHero.eyebrow),
+  lines: pick(settings?.hero?.lines, defaultHero.lines),
+  goldWord: pick(settings?.hero?.goldWord, defaultHero.goldWord),
+  body: pick(settings?.hero?.body, defaultHero.body),
+};
+const services = pick(settings?.services, defaultServices);
+const aboutStats = pick(settings?.aboutStats, defaultAboutStats);
+const homeAboutStrip = pick(
+  settings?.homeAboutStrip,
+  "I've spent my career at the intersection of design, code, and teaching — helping teams turn AI from a buzzword into a working system they actually own.",
+);
+const homeSections = {
+  workHeading: pick(settings?.homeSections?.workHeading, "Work I've done"),
+  workBlurb: pick(settings?.homeSections?.workBlurb, "A few of the builds I've taken clients through, start to ship."),
+  blogHeading: pick(settings?.homeSections?.blogHeading, "Writing & notes"),
+  blogBlurb: pick(
+    settings?.homeSections?.blogBlurb,
+    "Thoughts on AI strategy, education, and building without shortcuts.",
+  ),
+};
+const reviewSets = mergeReviewSets(settings?.reviewSets, defaultReviewSets);
+const homeCta = {
+  title: pick(settings?.homeCta?.title, "Ready to talk?"),
+  description: pick(
+    settings?.homeCta?.description,
+    "Let's find the right path for your team's AI implementation.",
+  ),
+  buttonLabel: pick(settings?.homeCta?.buttonLabel, "Book a Call"),
+};
 ---
 
 <Layout title="AI Education Consultant" showLoadingScreen>
@@ -71,8 +109,7 @@ const blogTones = ["sun", "blue"] as const;
     <div class="bento grid grid-cols-1 items-center gap-8 bg-brand-base p-12 text-white sm:grid-cols-2">
       <div class="flex flex-col gap-3.5">
         <p class="m-0 text-[19px] leading-relaxed">
-          I've spent my career at the intersection of design, code, and teaching — helping teams
-          turn AI from a buzzword into a working system they actually own.
+          {homeAboutStrip}
         </p>
         <a href="/about" class="font-bold text-sun-base">Read my full story →</a>
       </div>
@@ -86,7 +123,7 @@ const blogTones = ["sun", "blue"] as const;
   <section id="work" class="mt-14 flex flex-col gap-8">
     <div class="flex flex-col gap-[18px]">
       <SectionRail label="02 / WORK" linkLabel="View all →" linkHref="#work" />
-      <SectionHeading heading="Work I've done" blurb="A few of the builds I've taken clients through, start to ship.">
+      <SectionHeading heading={homeSections.workHeading} blurb={homeSections.workBlurb}>
         <div class="flex gap-3.5">
           <button
             id="work-scroll-left"
@@ -117,7 +154,7 @@ const blogTones = ["sun", "blue"] as const;
     <section id="blog" class="mt-14 flex flex-col gap-8">
       <div class="flex flex-col gap-[18px]">
         <SectionRail label="03 / BLOG" linkLabel="All posts →" linkHref="/blog" />
-        <SectionHeading heading="Writing & notes" blurb="Thoughts on AI strategy, education, and building without shortcuts." />
+        <SectionHeading heading={homeSections.blogHeading} blurb={homeSections.blogBlurb} />
       </div>
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {recentPosts.map((post, i) => <HomeBlogCard post={post} tone={blogTones[i % 2]} />)}
@@ -131,9 +168,9 @@ const blogTones = ["sun", "blue"] as const;
   <!-- CTA -->
   <section id="contact" class="mt-10">
     <CTAPanel
-      title="Ready to talk?"
-      description="Let's find the right path for your team's AI implementation."
-      buttonLabel="Book a Call"
+      title={homeCta.title}
+      description={homeCta.description}
+      buttonLabel={homeCta.buttonLabel}
       buttonHref="#contact"
       tone="cream"
       padding="p-12"

@@ -2,6 +2,7 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen.astro";
+import { navLinks } from "@/data/site";
 import "@/styles/global.css";
 
 interface Props {
@@ -53,11 +54,11 @@ const currentPath = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replac
   <body>
     {showLoadingScreen && <LoadingScreen />}
     <div class="page-container">
-      <Nav currentPath={currentPath} client:load />
+      <Nav currentPath={currentPath} navLinks={navLinks} client:load />
       <main>
         <slot />
       </main>
-      <Footer />
+      <Footer navLinks={navLinks} copyright="© 2026 D'Aaron Gonzalez" />
     </div>
   </body>
 </html>

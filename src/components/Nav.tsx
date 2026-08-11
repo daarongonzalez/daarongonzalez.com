@@ -1,8 +1,14 @@
 import { useState } from "react";
 import Button from "./Button";
-import { navLinks } from "@/data/site";
+import type { NavLink } from "@/data/site";
 
-export default function Nav({ currentPath = "" }: { currentPath?: string }) {
+export default function Nav({
+  currentPath = "",
+  navLinks,
+}: {
+  currentPath?: string;
+  navLinks: NavLink[];
+}) {
   const [open, setOpen] = useState(false);
 
   const isActive = (href: string) => {
