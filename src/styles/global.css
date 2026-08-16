@@ -95,6 +95,53 @@
     border-radius: 16px;
   }
 
+  /* Vellum ground — a near-invisible light-table grid under every cream surface */
+  .bg-cream {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--color-brand-base) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--color-brand-base) 6%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Hatch wash — 45° section-cut fill, used only as a thin divider band */
+  .hatch-rule {
+    height: 10px;
+    opacity: 0.14;
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--color-ink-darker) 0,
+      var(--color-ink-darker) 1px,
+      transparent 1px,
+      transparent 7px
+    );
+  }
+
+  /* Section-cut rule — the "shortened run" break mark, used as a section divider */
+  .cut-rule {
+    position: relative;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-ink-darker) 22%, transparent);
+  }
+
+  .cut-rule::before,
+  .cut-rule::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    width: 1.5px;
+    height: 17px;
+    background: color-mix(in srgb, var(--color-ink-darker) 45%, transparent);
+    transform: skewX(-20deg);
+  }
+
+  .cut-rule::before {
+    left: calc(50% - 7px);
+  }
+
+  .cut-rule::after {
+    left: calc(50% + 7px);
+  }
+
   .pill-btn {
     display: inline-flex;
     align-items: center;
