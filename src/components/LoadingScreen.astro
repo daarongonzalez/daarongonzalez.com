@@ -1,8 +1,30 @@
 ---
 import { loadingQuotes } from "@/data/loadingQuotes";
+import koiPrimary from "@/assets/images/koi/koi-primary.webp";
+import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 ---
 
 <div id="dg-loading-screen" class="dg-loading-screen" hidden>
+  <img
+    class="dg-loading-koi dg-loading-koi--tr"
+    src={koiPrimary.src}
+    width={koiPrimary.width}
+    height={koiPrimary.height}
+    alt=""
+    aria-hidden="true"
+    decoding="sync"
+    fetchpriority="high"
+  />
+  <img
+    class="dg-loading-koi dg-loading-koi--bl"
+    src={koiSecondary.src}
+    width={koiSecondary.width}
+    height={koiSecondary.height}
+    alt=""
+    aria-hidden="true"
+    decoding="sync"
+    fetchpriority="high"
+  />
   <div class="dg-loading-card">
     <p class="dg-loading-quote" id="dg-loading-quote"></p>
     <span class="dg-loading-author" id="dg-loading-author"></span>
@@ -61,6 +83,54 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     text-transform: uppercase;
     color: var(--color-sun-base);
   }
+
+  /* Koi settle in just after the quote has landed */
+  .dg-loading-koi {
+    position: absolute;
+    height: clamp(130px, 26vh, 320px);
+    width: auto;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 1.1s ease-out 0.85s;
+  }
+
+  .dg-loading-koi--tr {
+    top: 5vh;
+    right: 5vw;
+  }
+
+  .dg-loading-koi--bl {
+    bottom: 5vh;
+    left: 5vw;
+  }
+
+  .dg-loading-screen--koi .dg-loading-koi {
+    opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .dg-loading-koi {
+      height: clamp(96px, 17vh, 150px);
+    }
+
+    .dg-loading-koi--tr {
+      top: 3vh;
+      right: 3vw;
+    }
+
+    .dg-loading-koi--bl {
+      bottom: 3vh;
+      left: 3vw;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dg-loading-koi {
+      transition: none;
+      opacity: 1;
+    }
+  }
 </style>
 
 <script define:vars={{ quotes: loadingQuotes }}>
@@ -83,8 +153,14 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     el.hidden = false;
     document.documentElement.classList.add("dg-loading-lock");
 
+    // Commit the hidden-state styles before flipping the classes, so the
+    // browser has a starting opacity to transition from rather than
+    // painting the final state on the first frame.
+    void el.offsetWidth;
+
     requestAnimationFrame(function () {
       if (cardEl) cardEl.classList.add("dg-loading-card--visible");
+      el.classList.add("dg-loading-screen--koi");
     });
 
     var hide = function () {
@@ -96,7 +172,7 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     };
 
     var minTime = new Promise(function (resolve) {
-      setTimeout(resolve, 2000);
+      setTimeout(resolve, 3000);
     });
     var pageLoad = new Promise(function (resolve) {
       if (document.readyState === "complete") resolve();
