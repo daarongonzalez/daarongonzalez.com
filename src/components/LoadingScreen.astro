@@ -135,10 +135,20 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
   }
 
   /* Koi settle in just after the quote has landed */
+  /* Size is capped by whichever axis gives the koi more room to clear the
+     quote block — horizontal clearance beside it, or vertical clearance
+     above/below it. Taking the larger of the two means a wide window keeps
+     full-size koi beside the quote, while a squarer one falls back to the
+     height that still clears it top-to-bottom. vmin (not vh) so a tall
+     window doesn't inflate them in the first place. */
   .dg-loading-koi {
     position: absolute;
     z-index: 2;
-    height: clamp(150px, 30vh, 368px);
+    height: clamp(
+      180px,
+      min(42vmin, max(calc(66vw - 480px), calc(41vh - 80px))),
+      460px
+    );
     width: auto;
     opacity: 0;
     pointer-events: none;
@@ -147,13 +157,13 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
   }
 
   .dg-loading-koi--tr {
-    top: 5vh;
-    right: 5vw;
+    top: 9vh;
+    right: 9vw;
   }
 
   .dg-loading-koi--bl {
-    bottom: 5vh;
-    left: 5vw;
+    bottom: 9vh;
+    left: 9vw;
   }
 
   .dg-loading-screen--in .dg-loading-koi {
@@ -162,17 +172,17 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 
   @media (max-width: 640px) {
     .dg-loading-koi {
-      height: clamp(110px, 19.5vh, 173px);
+      height: clamp(154px, 27vh, 242px);
     }
 
     .dg-loading-koi--tr {
-      top: 3vh;
-      right: 3vw;
+      top: 5vh;
+      right: 5vw;
     }
 
     .dg-loading-koi--bl {
-      bottom: 3vh;
-      left: 3vw;
+      bottom: 5vh;
+      left: 5vw;
     }
   }
 
