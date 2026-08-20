@@ -5,8 +5,14 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 ---
 
 <div id="dg-loading-screen" class="dg-loading-screen" hidden>
+  <div class="dg-loading-pond" aria-hidden="true">
+    <span class="dg-loading-ring dg-loading-ring--1"></span>
+    <span class="dg-loading-ring dg-loading-ring--2"></span>
+    <span class="dg-loading-ring dg-loading-ring--3"></span>
+    <span class="dg-loading-ring dg-loading-ring--4"></span>
+  </div>
   <img
-    class="dg-loading-koi dg-loading-koi--tr"
+    class="dg-loading-koi dg-loading-koi--bl"
     src={koiPrimary.src}
     width={koiPrimary.width}
     height={koiPrimary.height}
@@ -16,7 +22,7 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     fetchpriority="high"
   />
   <img
-    class="dg-loading-koi dg-loading-koi--bl"
+    class="dg-loading-koi dg-loading-koi--tr"
     src={koiSecondary.src}
     width={koiSecondary.width}
     height={koiSecondary.height}
@@ -52,7 +58,51 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     transform: translateY(-28px);
   }
 
+  /* Ripple — a drip spreading from the centre of the pond, under everything else */
+  .dg-loading-pond {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .dg-loading-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vmax;
+    height: 40vmax;
+    margin: -20vmax 0 0 -20vmax;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--color-brand-base) 55%, transparent);
+    opacity: 0;
+    transform: scale(0.08);
+  }
+
+  /* Linear travel — real ripples spread at a constant rate and decay in
+     amplitude, which also keeps the rings evenly spaced as they stack up. */
+  .dg-loading-screen--in .dg-loading-ring {
+    animation: dg-pond-ring 2.8s linear forwards;
+  }
+
+  /* These must match the specificity of the rule above, or its `animation`
+     shorthand resets the delay back to 0 and every ring travels in lockstep. */
+  .dg-loading-screen--in .dg-loading-ring--1 { animation-delay: 0s; }
+  .dg-loading-screen--in .dg-loading-ring--2 { animation-delay: 0.55s; }
+  .dg-loading-screen--in .dg-loading-ring--3 { animation-delay: 1.1s; }
+  .dg-loading-screen--in .dg-loading-ring--4 { animation-delay: 1.65s; }
+
+  @keyframes dg-pond-ring {
+    0% { transform: scale(0.08); opacity: 0; border-width: 2.5px; }
+    8% { opacity: 0.65; }
+    60% { opacity: 0.5; }
+    100% { transform: scale(3.2); opacity: 0; border-width: 0.5px; }
+  }
+
   .dg-loading-card {
+    position: relative;
+    z-index: 3;
     display: flex;
     max-width: 560px;
     flex-direction: column;
@@ -87,7 +137,8 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
   /* Koi settle in just after the quote has landed */
   .dg-loading-koi {
     position: absolute;
-    height: clamp(130px, 26vh, 320px);
+    z-index: 2;
+    height: clamp(150px, 30vh, 368px);
     width: auto;
     opacity: 0;
     pointer-events: none;
@@ -105,13 +156,13 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     left: 5vw;
   }
 
-  .dg-loading-screen--koi .dg-loading-koi {
+  .dg-loading-screen--in .dg-loading-koi {
     opacity: 1;
   }
 
   @media (max-width: 640px) {
     .dg-loading-koi {
-      height: clamp(96px, 17vh, 150px);
+      height: clamp(110px, 19.5vh, 173px);
     }
 
     .dg-loading-koi--tr {
@@ -126,6 +177,10 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .dg-loading-pond {
+      display: none;
+    }
+
     .dg-loading-koi {
       transition: none;
       opacity: 1;
@@ -160,7 +215,7 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 
     requestAnimationFrame(function () {
       if (cardEl) cardEl.classList.add("dg-loading-card--visible");
-      el.classList.add("dg-loading-screen--koi");
+      el.classList.add("dg-loading-screen--in");
     });
 
     var hide = function () {
