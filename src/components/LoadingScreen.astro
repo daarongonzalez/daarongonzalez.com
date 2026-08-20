@@ -1,8 +1,36 @@
 ---
 import { loadingQuotes } from "@/data/loadingQuotes";
+import koiPrimary from "@/assets/images/koi/koi-primary.webp";
+import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 ---
 
 <div id="dg-loading-screen" class="dg-loading-screen" hidden>
+  <div class="dg-loading-pond" aria-hidden="true">
+    <span class="dg-loading-ring dg-loading-ring--1"></span>
+    <span class="dg-loading-ring dg-loading-ring--2"></span>
+    <span class="dg-loading-ring dg-loading-ring--3"></span>
+    <span class="dg-loading-ring dg-loading-ring--4"></span>
+  </div>
+  <img
+    class="dg-loading-koi dg-loading-koi--bl"
+    src={koiPrimary.src}
+    width={koiPrimary.width}
+    height={koiPrimary.height}
+    alt=""
+    aria-hidden="true"
+    decoding="sync"
+    fetchpriority="high"
+  />
+  <img
+    class="dg-loading-koi dg-loading-koi--tr"
+    src={koiSecondary.src}
+    width={koiSecondary.width}
+    height={koiSecondary.height}
+    alt=""
+    aria-hidden="true"
+    decoding="sync"
+    fetchpriority="high"
+  />
   <div class="dg-loading-card">
     <p class="dg-loading-quote" id="dg-loading-quote"></p>
     <span class="dg-loading-author" id="dg-loading-author"></span>
@@ -30,7 +58,51 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     transform: translateY(-28px);
   }
 
+  /* Ripple — a drip spreading from the centre of the pond, under everything else */
+  .dg-loading-pond {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .dg-loading-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vmax;
+    height: 40vmax;
+    margin: -20vmax 0 0 -20vmax;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--color-brand-base) 55%, transparent);
+    opacity: 0;
+    transform: scale(0.08);
+  }
+
+  /* Linear travel — real ripples spread at a constant rate and decay in
+     amplitude, which also keeps the rings evenly spaced as they stack up. */
+  .dg-loading-screen--in .dg-loading-ring {
+    animation: dg-pond-ring 2.8s linear forwards;
+  }
+
+  /* These must match the specificity of the rule above, or its `animation`
+     shorthand resets the delay back to 0 and every ring travels in lockstep. */
+  .dg-loading-screen--in .dg-loading-ring--1 { animation-delay: 0s; }
+  .dg-loading-screen--in .dg-loading-ring--2 { animation-delay: 0.55s; }
+  .dg-loading-screen--in .dg-loading-ring--3 { animation-delay: 1.1s; }
+  .dg-loading-screen--in .dg-loading-ring--4 { animation-delay: 1.65s; }
+
+  @keyframes dg-pond-ring {
+    0% { transform: scale(0.08); opacity: 0; border-width: 2.5px; }
+    8% { opacity: 0.65; }
+    60% { opacity: 0.5; }
+    100% { transform: scale(3.2); opacity: 0; border-width: 0.5px; }
+  }
+
   .dg-loading-card {
+    position: relative;
+    z-index: 3;
     display: flex;
     max-width: 560px;
     flex-direction: column;
@@ -61,6 +133,69 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     text-transform: uppercase;
     color: var(--color-sun-base);
   }
+
+  /* Koi settle in just after the quote has landed */
+  /* Size is capped by whichever axis gives the koi more room to clear the
+     quote block — horizontal clearance beside it, or vertical clearance
+     above/below it. Taking the larger of the two means a wide window keeps
+     full-size koi beside the quote, while a squarer one falls back to the
+     height that still clears it top-to-bottom. vmin (not vh) so a tall
+     window doesn't inflate them in the first place. */
+  .dg-loading-koi {
+    position: absolute;
+    z-index: 2;
+    height: clamp(
+      180px,
+      min(42vmin, max(calc(66vw - 480px), calc(41vh - 80px))),
+      460px
+    );
+    width: auto;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 1.1s ease-out 0.85s;
+  }
+
+  .dg-loading-koi--tr {
+    top: 9vh;
+    right: 9vw;
+  }
+
+  .dg-loading-koi--bl {
+    bottom: 9vh;
+    left: 9vw;
+  }
+
+  .dg-loading-screen--in .dg-loading-koi {
+    opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .dg-loading-koi {
+      height: clamp(154px, 27vh, 242px);
+    }
+
+    .dg-loading-koi--tr {
+      top: 5vh;
+      right: 5vw;
+    }
+
+    .dg-loading-koi--bl {
+      bottom: 5vh;
+      left: 5vw;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dg-loading-pond {
+      display: none;
+    }
+
+    .dg-loading-koi {
+      transition: none;
+      opacity: 1;
+    }
+  }
 </style>
 
 <script define:vars={{ quotes: loadingQuotes }}>
@@ -83,8 +218,14 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     el.hidden = false;
     document.documentElement.classList.add("dg-loading-lock");
 
+    // Commit the hidden-state styles before flipping the classes, so the
+    // browser has a starting opacity to transition from rather than
+    // painting the final state on the first frame.
+    void el.offsetWidth;
+
     requestAnimationFrame(function () {
       if (cardEl) cardEl.classList.add("dg-loading-card--visible");
+      el.classList.add("dg-loading-screen--in");
     });
 
     var hide = function () {
@@ -96,7 +237,7 @@ import { loadingQuotes } from "@/data/loadingQuotes";
     };
 
     var minTime = new Promise(function (resolve) {
-      setTimeout(resolve, 2000);
+      setTimeout(resolve, 3000);
     });
     var pageLoad = new Promise(function (resolve) {
       if (document.readyState === "complete") resolve();
