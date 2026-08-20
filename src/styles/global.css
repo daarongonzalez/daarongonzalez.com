@@ -167,4 +167,36 @@
     padding: 5px 12px;
     border-radius: 999px;
   }
+
+  /* Record platter — a real 33rpm turn is far slower than Tailwind's animate-spin */
+  .record-spin {
+    animation: record-spin 3.6s linear infinite;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes record-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .record-spin {
+      animation: none;
+    }
+  }
+
+  /* Logo band — marks sit back until hovered, so they read as proof, not decoration */
+  .logo-mark {
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition:
+      filter 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  .logo-mark:hover {
+    filter: grayscale(0);
+    opacity: 1;
+  }
 }

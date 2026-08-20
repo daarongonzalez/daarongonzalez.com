@@ -6,6 +6,9 @@ import StatTile from "@/components/StatTile";
 import SectionRail from "@/components/SectionRail.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import WorkCard from "@/components/WorkCard";
+import PlaylistCard from "@/components/PlaylistCard";
+import EducationCard from "@/components/EducationCard";
+import LogoBand from "@/components/LogoBand";
 import HomeBlogCard from "@/components/HomeBlogCard";
 import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
@@ -16,6 +19,7 @@ import {
   reviewSets as defaultReviewSets,
 } from "@/data/site";
 import { projects } from "@/data/projects";
+import { educationFormats, teachingOrgs } from "@/data/education";
 import { getAllPosts, getSiteSettings } from "@/lib/sanity";
 import { pick, mergeReviewSets } from "@/lib/content";
 import heroHeadshot from "@/assets/images/hero-headshot.jpg";
@@ -40,6 +44,12 @@ const homeAboutStrip = pick(
 const homeSections = {
   workHeading: pick(settings?.homeSections?.workHeading, "Work I've done"),
   workBlurb: pick(settings?.homeSections?.workBlurb, "A few of the builds I've taken clients through, start to ship."),
+  educationHeading: pick(settings?.homeSections?.educationHeading, "Teams I've taught"),
+  educationBlurb: pick(
+    settings?.homeSections?.educationBlurb,
+    "Training that ends with your team independent — not booked for a follow-up.",
+  ),
+  educationLogoLabel: pick(settings?.homeSections?.educationLogoLabel, "Taught with"),
   blogHeading: pick(settings?.homeSections?.blogHeading, "Writing & notes"),
   blogBlurb: pick(
     settings?.homeSections?.blogBlurb,
@@ -99,8 +109,9 @@ const homeCta = {
   </section>
 
   <!-- SERVICES -->
-  <section class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+  <section class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {services.map((service, i) => <ServiceCard number={`0${i + 1}`} {...service} />)}
+    <PlaylistCard client:visible />
   </section>
 
   <!-- ABOUT STRIP -->
@@ -149,13 +160,26 @@ const homeCta = {
     </div>
   </section>
 
+  <!-- EDUCATION -->
+  <div class="cut-rule mt-14" aria-hidden="true"></div>
+  <section id="education" class="mt-8 flex flex-col gap-8">
+    <div class="flex flex-col gap-[18px]">
+      <SectionRail label="03 / EDUCATION" linkLabel="All formats →" linkHref="/events" />
+      <SectionHeading heading={homeSections.educationHeading} blurb={homeSections.educationBlurb} />
+    </div>
+    <LogoBand label={homeSections.educationLogoLabel} orgs={teachingOrgs} />
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {educationFormats.map((format, i) => <EducationCard number={`0${i + 1}`} {...format} />)}
+    </div>
+  </section>
+
   <!-- BLOG -->
   {recentPosts.length > 0 && (
     <>
       <div class="cut-rule mt-14" aria-hidden="true"></div>
       <section id="blog" class="mt-8 flex flex-col gap-8">
         <div class="flex flex-col gap-[18px]">
-          <SectionRail label="03 / BLOG" linkLabel="All posts →" linkHref="/blog" />
+          <SectionRail label="04 / BLOG" linkLabel="All posts →" linkHref="/blog" />
           <SectionHeading heading={homeSections.blogHeading} blurb={homeSections.blogBlurb} />
         </div>
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -166,7 +190,7 @@ const homeCta = {
   )}
 
   <!-- PRAISE -->
-  <ReviewBand sets={reviewSets} client:load />
+  <ReviewBand sets={reviewSets} label="05 / PRAISE" client:load />
 
   <!-- CTA -->
   <section id="contact" class="mt-10">

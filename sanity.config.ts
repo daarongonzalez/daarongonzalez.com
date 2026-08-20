@@ -164,6 +164,14 @@ const siteSettings = defineType({
       fields: [
         defineField({ name: 'workHeading', type: 'string' }),
         defineField({ name: 'workBlurb', type: 'text' }),
+        defineField({ name: 'educationHeading', type: 'string' }),
+        defineField({ name: 'educationBlurb', type: 'text' }),
+        defineField({
+          name: 'educationLogoLabel',
+          title: 'Logo band label',
+          description: 'Sits above the "taught with" logos.',
+          type: 'string',
+        }),
         defineField({ name: 'blogHeading', type: 'string' }),
         defineField({ name: 'blogBlurb', type: 'text' }),
       ],
