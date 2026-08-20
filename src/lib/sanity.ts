@@ -90,6 +90,9 @@ export interface SiteSettings {
   homeSections?: {
     workHeading?: string;
     workBlurb?: string;
+    educationHeading?: string;
+    educationBlurb?: string;
+    educationLogoLabel?: string;
     blogHeading?: string;
     blogBlurb?: string;
   };

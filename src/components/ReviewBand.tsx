@@ -16,7 +16,13 @@ function Avatar({ review, size }: { review: Review; size: number }) {
   return <div style={style} className="flex-none rounded-full bg-cream/[.14]" />;
 }
 
-export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
+export default function ReviewBand({
+  sets,
+  label = "04 / PRAISE",
+}: {
+  sets: ReviewPair[];
+  label?: string;
+}) {
   const [index, setIndex] = useState(0);
   const hasMultiple = sets.length > 1;
   const { primary, secondary } = sets[index % sets.length];
@@ -25,7 +31,7 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
     <section className="mt-14 flex flex-col gap-8">
       <div className="flex items-center gap-5">
         <div className="whitespace-nowrap text-[13px] font-bold tracking-[.18em] text-brand-base">
-          04 / PRAISE
+          {label}
         </div>
         <div className="h-1 flex-1 bg-sun-base" />
         {hasMultiple && (
