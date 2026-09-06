@@ -1,0 +1,95 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<svg
+  class:list={["brush-rule", className]}
+  viewBox="0 0 900 30"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  data-brush-rule
+>
+  <path d=""></path>
+</svg>
+
+<script>
+  // A brush stroke is a filled outline with a width profile, not a stroked line.
+  // Sample a spine, offset each sample along its normal by a half-width that
+  // swells early and tapers to a point at both ends, then close the polygon.
+  // Seeded per instance so every divider on the site is a different stroke.
+  function mulberry32(a: number) {
+    return function () {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function brushPath(w: number, h: number, seed: number) {
+    const rand = mulberry32(seed);
+    const N = 76;
+    const midY = h / 2;
+    const amp = h * (0.06 + rand() * 0.07);
+    const phase = rand() * Math.PI * 2;
+    const freq = 0.55 + rand() * 0.5;
+    const maxW = h * (0.095 + rand() * 0.035);
+    const belly = 0.62 + rand() * 0.16;
+    const wobbleAmp = 0.08 + rand() * 0.1;
+    const wobbleFreq = 3 + rand() * 3;
+
+    const spineY = (t: number) => midY + Math.sin(phase + t * freq * Math.PI * 2) * amp;
+    const halfW = (t: number) => {
+      const base = Math.pow(Math.sin(Math.PI * Math.pow(t, belly)), 0.8);
+      return maxW * base * (1 + Math.sin(t * wobbleFreq * Math.PI * 2 + phase) * wobbleAmp);
+    };
+
+    const top: number[][] = [];
+    const bot: number[][] = [];
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const dt = 0.5 / N;
+      const x = t * w;
+      const y = spineY(t);
+      const dx = w * dt * 2;
+      const dy = spineY(Math.min(1, t + dt)) - spineY(Math.max(0, t - dt));
+      const len = Math.sqrt(dx * dx + dy * dy) || 1;
+      const nx = -dy / len;
+      const ny = dx / len;
+      const hw = halfW(t);
+      top.push([x + nx * hw, y + ny * hw]);
+      bot.push([x - nx * hw, y - ny * hw]);
+    }
+
+    let d = `M ${top[0][0].toFixed(2)} ${top[0][1].toFixed(2)}`;
+    for (let i = 1; i < top.length; i++) d += ` L ${top[i][0].toFixed(2)} ${top[i][1].toFixed(2)}`;
+    for (let i = bot.length - 1; i >= 0; i--) d += ` L ${bot[i][0].toFixed(2)} ${bot[i][1].toFixed(2)}`;
+    return `${d} Z`;
+  }
+
+  const seeds = new WeakMap<Element, number>();
+
+  function paint(svg: SVGSVGElement) {
+    const w = Math.max(120, Math.round(svg.getBoundingClientRect().width));
+    const h = 30;
+    let seed = seeds.get(svg);
+    if (seed === undefined) {
+      seed = Math.floor(Math.random() * 1e9);
+      seeds.set(svg, seed);
+    }
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.querySelector("path")?.setAttribute("d", brushPath(w, h, seed));
+  }
+
+  function paintAll() {
+    document.querySelectorAll<SVGSVGElement>("[data-brush-rule]").forEach(paint);
+  }
+
+  paintAll();
+  window.addEventListener("resize", paintAll);
+</script>

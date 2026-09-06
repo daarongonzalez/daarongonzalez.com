@@ -9,6 +9,7 @@ import WorkCard from "@/components/WorkCard";
 import HomeBlogCard from "@/components/HomeBlogCard";
 import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
+import BrushRule from "@/components/BrushRule.astro";
 import {
   services as defaultServices,
   aboutStats as defaultAboutStats,
@@ -61,7 +62,7 @@ const homeCta = {
   <!-- HERO -->
   <section class="mt-5">
     <div class="bento bento-hero grid min-h-[520px] grid-cols-1 overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]">
-      <div class="relative flex flex-col justify-center gap-6 overflow-hidden bg-brand-base p-8 text-cream sm:px-14 sm:py-16">
+      <div class="bokashi-cool relative flex flex-col justify-center gap-6 overflow-hidden bg-brand-base p-8 text-cream sm:px-14 sm:py-16">
         <div class="pointer-events-none absolute inset-0 overflow-hidden">
           <div class="absolute -right-[90px] -top-[110px] h-[340px] w-[340px] rounded-full bg-sun-base opacity-[.09]"></div>
           <div class="absolute -bottom-[160px] -left-[140px] h-[420px] w-[420px] rounded-full bg-cream opacity-[.05]"></div>
@@ -106,7 +107,7 @@ const homeCta = {
   <!-- ABOUT STRIP -->
   <section id="about" class="mt-10 flex flex-col gap-[18px]">
     <SectionRail label="01 / ABOUT" linkLabel="Full story →" linkHref="/about" />
-    <div class="bento grid grid-cols-1 items-center gap-8 bg-brand-base p-12 text-white sm:grid-cols-2">
+    <div class="bento bokashi-cool grid grid-cols-1 items-center gap-8 bg-brand-base p-12 text-white sm:grid-cols-2">
       <div class="flex flex-col gap-3.5">
         <p class="m-0 text-[19px] leading-relaxed">
           {homeAboutStrip}
@@ -152,7 +153,7 @@ const homeCta = {
   <!-- BLOG -->
   {recentPosts.length > 0 && (
     <>
-      <div class="cut-rule mt-14" aria-hidden="true"></div>
+      <BrushRule class="mt-14" />
       <section id="blog" class="mt-8 flex flex-col gap-8">
         <div class="flex flex-col gap-[18px]">
           <SectionRail label="03 / BLOG" linkLabel="All posts →" linkHref="/blog" />
