@@ -46,13 +46,15 @@ export interface Review {
   lead?: string;
   body: string;
   name: string;
-  role: string;
+  /** Omitted where the reviewer's title isn't confirmed — the band hides the line. */
+  role?: string;
   avatar?: string;
 }
 
 export interface ReviewPair {
   primary: Review;
-  secondary: Review;
+  /** Optional — a batch with an odd review out runs with the primary alone. */
+  secondary?: Review;
 }
 
 export const reviewSets: ReviewPair[] = [
@@ -69,6 +71,35 @@ export const reviewSets: ReviewPair[] = [
       name: "Jackson McKenna",
       role: "Owner, Two If By Sea",
       avatar: jacksonMcKenna.src,
+    },
+  },
+  {
+    primary: {
+      lead: "He strives to understand the content and the customer to deliver a high-value experience for all.",
+      body: "I've been working with D'Aaron for 6+ months. He is very knowledgeable about AI, tools, platforms, and business. He has led multiple technical workshops — all were a huge success. The workshops are well planned and engaging for all participants, and I've learned so much from him during them, in online interactions, and in 1:1 conversations.",
+      name: "Hilda S.",
+    },
+    secondary: {
+      body: "D'Aaron is an exceptional instructor who keeps our Stack community thriving. He seamlessly orchestrates live workshops and updates, and what truly sets him apart is his hands-on approach to teaching the tool sessions himself. Whenever I need guidance, he is responsive, helpful, and a fantastic instructor.",
+      name: "John N.",
+    },
+  },
+  {
+    primary: {
+      lead: "There are teachers who care, and teachers who teach because it's their calling. D'Aaron is the textbook definition of the latter.",
+      body: "He could be doing anything in AI, but chooses to spend his time sharing his knowledge, making it easy and fun to understand and always going above and beyond. Anyone would be lucky to work with him.",
+      name: "Stefan B.",
+    },
+    secondary: {
+      body: "I'm working on getting an AI certification, and I always rely on D'Aaron for any strategic or AI customization questions I have. I attended a few of the online workshops he taught about Claude and found him to be very knowledgeable. He responds to the numerous questions I ask about starting my AI consulting business — he's committed to helping his students succeed.",
+      name: "Gentille B.",
+    },
+  },
+  {
+    primary: {
+      lead: "I know D'Aaron as a coach and community builder.",
+      body: "He helped me with my first client, shared GTM strategies, and supported my hearing loss newsletter's early days. Since we're both in the 801, we've been able to meet a few times — and I'm hoping we can keep doing so.",
+      name: "Mark P.",
     },
   },
 ];

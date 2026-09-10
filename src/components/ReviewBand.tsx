@@ -45,21 +45,33 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
               <Avatar review={primary} size={52} />
               <div>
                 <div className="text-[15px] font-bold">{primary.name}</div>
-                <div className="text-[13px] text-brand-meta">{primary.role}</div>
+                {primary.role && <div className="text-[13px] text-brand-meta">{primary.role}</div>}
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 border-white/[.18] pt-0 lg:border-l lg:pt-[74px] lg:pl-9">
-            <div className="text-xs font-bold tracking-[.18em] text-sun-base">ALSO SAID</div>
-            <p className="m-0 text-base leading-relaxed text-cream-deep">{secondary.body}</p>
-            <div className="mt-0.5 flex items-center gap-3">
-              <Avatar review={secondary} size={44} />
-              <div>
-                <div className="text-sm font-bold">{secondary.name}</div>
-                <div className="text-[12.5px] text-brand-meta">{secondary.role}</div>
-              </div>
-            </div>
+          <div
+            className={`flex flex-col gap-4 border-white/[.18] pt-0 lg:pt-[74px] ${
+              // Without a second review the rule would fence off an empty
+              // column, which reads as missing content rather than as a divide.
+              secondary ? "lg:border-l lg:pl-9" : ""
+            }`}
+          >
+            {secondary && (
+              <>
+                <div className="text-xs font-bold tracking-[.18em] text-sun-base">ALSO SAID</div>
+                <p className="m-0 text-base leading-relaxed text-cream-deep">{secondary.body}</p>
+                <div className="mt-0.5 flex items-center gap-3">
+                  <Avatar review={secondary} size={44} />
+                  <div>
+                    <div className="text-sm font-bold">{secondary.name}</div>
+                    {secondary.role && (
+                      <div className="text-[12.5px] text-brand-meta">{secondary.role}</div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
             {hasMultiple && (
               <div className="mt-3.5 flex flex-wrap items-center gap-4">
                 <button
