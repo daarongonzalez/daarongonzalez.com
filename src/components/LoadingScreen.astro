@@ -114,6 +114,11 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     position: absolute;
     height: clamp(110px, 22vmin, 240px);
     width: auto;
+    /* The orbit frame is a zero-width point, so Tailwind's preflight rule of
+       `img { max-width: 100% }` resolves to `max-width: 0` here and collapses
+       both koi to nothing. They still animate — there is just no width to
+       draw. Opting out is what keeps them visible. */
+    max-width: none;
     opacity: 0;
   }
 
