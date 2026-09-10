@@ -45,7 +45,7 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
               <Avatar review={primary} size={52} />
               <div>
                 <div className="text-[15px] font-bold">{primary.name}</div>
-                <div className="text-[13px] text-brand-meta">{primary.role}</div>
+                {primary.role && <div className="text-[13px] text-brand-meta">{primary.role}</div>}
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function ReviewBand({ sets }: { sets: ReviewPair[] }) {
               <Avatar review={secondary} size={44} />
               <div>
                 <div className="text-sm font-bold">{secondary.name}</div>
-                <div className="text-[12.5px] text-brand-meta">{secondary.role}</div>
+                {secondary.role && <div className="text-[12.5px] text-brand-meta">{secondary.role}</div>}
               </div>
             </div>
             {hasMultiple && (
