@@ -38,6 +38,20 @@
   --font-body: "Nunito Sans", sans-serif;
 }
 
+/* Registered so the wash stops can interpolate; without this the hover deepen
+   would jump rather than bleed. */
+@property --wash-top {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ccd3e3;
+}
+
+@property --wash-bottom {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #e5e9f1;
+}
+
 @layer base {
   html.dg-loading-lock {
     overflow: hidden;
@@ -95,51 +109,71 @@
     border-radius: 16px;
   }
 
-  /* Vellum ground — a near-invisible light-table grid under every cream surface */
-  .bg-cream {
-    background-image:
-      linear-gradient(color-mix(in srgb, var(--color-brand-base) 6%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--color-brand-base) 6%, transparent) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  /* Hatch wash — 45° section-cut fill, used only as a thin divider band */
-  .hatch-rule {
-    height: 10px;
-    opacity: 0.14;
-    background-image: repeating-linear-gradient(
-      45deg,
-      var(--color-ink-darker) 0,
-      var(--color-ink-darker) 1px,
-      transparent 1px,
-      transparent 7px
+  /* Bokashi — the graduated ink wash a printer pulls by hand across one block.
+     Replaces flat fills on the large navy panels. */
+  .bokashi-cool {
+    background-image: linear-gradient(
+      180deg,
+      var(--color-brand-darker) 0%,
+      var(--color-brand-base) 55%,
+      var(--color-brand-light) 100%
     );
   }
 
-  /* Section-cut rule — the "shortened run" break mark, used as a section divider */
-  .cut-rule {
-    position: relative;
-    height: 1px;
-    background: color-mix(in srgb, var(--color-ink-darker) 22%, transparent);
+  /* The warm Red Fuji variant — one featured surface at a time, never two */
+  .bokashi-warm {
+    background-image: linear-gradient(
+      180deg,
+      var(--color-sun-dark) 0%,
+      var(--color-sun-base) 55%,
+      var(--color-sun-lighter) 100%
+    );
   }
 
-  .cut-rule::before,
-  .cut-rule::after {
-    content: "";
-    position: absolute;
-    top: -8px;
-    width: 1.5px;
-    height: 17px;
-    background: color-mix(in srgb, var(--color-ink-darker) 45%, transparent);
-    transform: skewX(-20deg);
+  /* Stipple — shade carried by dot density, the way the print's tree lines are
+     built. Used as a divider band in place of a ruled line. */
+  .stipple-band {
+    height: 26px;
+    opacity: 0.5;
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--color-brand-base) 62%, transparent) 1px,
+      transparent 1.4px
+    );
+    background-size: 7px 7px;
+    -webkit-mask-image: linear-gradient(180deg, var(--color-ink-darkest) 0%, transparent 92%);
+    mask-image: linear-gradient(180deg, var(--color-ink-darkest) 0%, transparent 92%);
   }
 
-  .cut-rule::before {
-    left: calc(50% - 7px);
+  /* Display numerals printed as a graduated wash rather than drawn as outline.
+     The stops themselves deepen on hover — fading a navy wash out with opacity
+     instead would desaturate it to grey against the cream. */
+  .numeral-wash {
+    --wash-top: var(--color-brand-lighter);
+    --wash-bottom: var(--color-brand-lightest);
+    background-image: linear-gradient(180deg, var(--wash-top) 0%, var(--wash-bottom) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition:
+      --wash-top 0.45s ease-out,
+      --wash-bottom 0.45s ease-out;
   }
 
-  .cut-rule::after {
-    left: calc(50% + 7px);
+  .group:hover .numeral-wash {
+    --wash-top: var(--color-brand-darker);
+    --wash-bottom: var(--color-brand-light);
+  }
+
+  /* Brush rule — a filled outline with a real width profile, generated at
+     runtime by BrushRule.astro so no two dividers on the site are identical. */
+  .brush-rule {
+    display: block;
+    width: 100%;
+    height: 30px;
+  }
+
+  .brush-rule path {
+    fill: color-mix(in srgb, var(--color-brand-base) 72%, transparent);
   }
 
   .pill-btn {
