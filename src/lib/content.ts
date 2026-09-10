@@ -1,4 +1,4 @@
-import type { ReviewPair } from "@/data/site";
+import type { Review, ReviewPair } from "@/data/site";
 import type { FetchedReviewPair } from "@/lib/sanity";
 
 /** Use a Sanity value when present and non-empty, otherwise fall back to the hardcoded default. */
@@ -21,9 +21,13 @@ export function mergeReviewSets(
   if (!fetched?.length) return defaults;
   return fetched.map((pair, i) => {
     const fallback = defaults[i] ?? defaults[defaults.length - 1];
+    const secondary = { ...fallback.secondary, ...pair.secondary };
     return {
       primary: { ...fallback.primary, ...pair.primary },
-      secondary: { ...fallback.secondary, ...pair.secondary },
+      // A batch can legitimately carry a single review, so only pass a second
+      // one through once the merge has actually produced a usable review —
+      // otherwise a half-filled object would render a nameless quote.
+      ...(secondary.name && secondary.body ? { secondary: secondary as Review } : {}),
     };
   });
 }

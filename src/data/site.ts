@@ -53,7 +53,8 @@ export interface Review {
 
 export interface ReviewPair {
   primary: Review;
-  secondary: Review;
+  /** Optional — a batch with an odd review out runs with the primary alone. */
+  secondary?: Review;
 }
 
 export const reviewSets: ReviewPair[] = [
@@ -92,6 +93,13 @@ export const reviewSets: ReviewPair[] = [
     secondary: {
       body: "I'm working on getting an AI certification, and I always rely on D'Aaron for any strategic or AI customization questions I have. I attended a few of the online workshops he taught about Claude and found him to be very knowledgeable. He responds to the numerous questions I ask about starting my AI consulting business — he's committed to helping his students succeed.",
       name: "Gentille B.",
+    },
+  },
+  {
+    primary: {
+      lead: "I know D'Aaron as a coach and community builder.",
+      body: "He helped me with my first client, shared GTM strategies, and supported my hearing loss newsletter's early days. Since we're both in the 801, we've been able to meet a few times — and I'm hoping we can keep doing so.",
+      name: "Mark P.",
     },
   },
 ];
