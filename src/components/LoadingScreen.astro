@@ -43,8 +43,8 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     background: var(--color-cream);
     opacity: 1;
     transition:
-      opacity 0.6s ease-in-out,
-      transform 0.6s ease-in-out;
+      opacity 1.1s ease-in-out,
+      transform 1.1s ease-in-out;
   }
 
   .dg-loading-screen--hide {
@@ -60,7 +60,7 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     flex-direction: column;
     gap: 14px;
     opacity: 0;
-    transition: opacity 0.6s ease-in-out;
+    transition: opacity 1.1s ease-in-out;
   }
 
   .dg-loading-card--visible {
@@ -100,19 +100,18 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     pointer-events: none;
     user-select: none;
 
-    /* Wide enough that the koi ride outside the quote block rather than
-       across it — the sweep starts level with the quote, which is where the
-       two would otherwise collide. */
-    --dg-orbit-r: clamp(200px, 36vmin, 340px);
+    --dg-orbit-r: clamp(160px, 26vmin, 280px);
 
-    /* Start of the counter-clockwise sweep: a quarter turn ahead of the
-       finish. CSS rotates clockwise, so the sweep runs down to 0. */
-    transform: rotate(90deg);
+    /* Start of the sweep, a quarter turn back from the finish. CSS rotates
+       clockwise, so running up to 0 travels clockwise. */
+    transform: rotate(-90deg);
   }
 
   .dg-loading-koi {
     position: absolute;
-    height: clamp(110px, 22vmin, 240px);
+    /* Sizes each fish along its own long axis, which the tangent rotation
+       below lays horizontal. */
+    height: clamp(200px, 52vmin, 520px);
     width: auto;
     /* The orbit frame is a zero-width point, so Tailwind's preflight rule of
        `img { max-width: 100% }` resolves to `max-width: 0` here and collapses
@@ -122,47 +121,57 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     opacity: 0;
   }
 
-  /* translate(-50%, -50%) centres each koi on the orbit point; the second
-     translateY pushes it out to the rim. */
+  /* Read right to left: each fish is turned to sit along the path, pushed out
+     to the rim, then centred on its orbit point.
+
+     That trailing rotation is what makes them swim rather than tumble. The
+     frame's angle and a fish's position on the rim are the same value, so one
+     fixed angle per fish holds it tangent to the circle for the whole sweep,
+     not only at the landing.
+
+     The two angles differ because the source art does: the navy koi is drawn
+     heading up and the gold one heading down-left, so each needs its own
+     correction to face along the path. */
   .dg-loading-koi--lead {
-    transform: translate(-50%, -50%) translateY(calc(-1 * var(--dg-orbit-r)));
+    transform: translate(-50%, -50%) translateY(calc(-1 * var(--dg-orbit-r)))
+      rotate(81deg);
   }
 
   .dg-loading-koi--trail {
-    transform: translate(-50%, -50%) translateY(var(--dg-orbit-r));
+    transform: translate(-50%, -50%) translateY(var(--dg-orbit-r)) rotate(78deg);
   }
 
-  /* A quarter turn counter-clockwise, easing in and out of the motion, landing
-     with one koi above the quote and one below it. */
+  /* Both fish start together, a beat after the quote has begun to land, so the
+     order reads as quote first and then the pair. */
   .dg-loading-screen--in .dg-loading-orbit {
-    animation: dg-koi-orbit 2.4s cubic-bezier(0.45, 0, 0.55, 1) 0.35s forwards;
+    animation: dg-koi-orbit 2.5s cubic-bezier(0.45, 0, 0.55, 1) 1.25s forwards;
   }
 
   .dg-loading-screen--in .dg-loading-koi {
-    animation: dg-koi-fade 2.4s cubic-bezier(0.45, 0, 0.55, 1) 0.35s forwards;
+    animation: dg-koi-fade 2.5s cubic-bezier(0.45, 0, 0.55, 1) 1.25s forwards;
   }
 
+  /* A quarter turn clockwise, easing in and out of the motion, landing with
+     one koi above the quote and one below it. */
   @keyframes dg-koi-orbit {
-    from { transform: rotate(90deg); }
+    from { transform: rotate(-90deg); }
     to { transform: rotate(0deg); }
   }
 
-  /* Held back deliberately: the koi are still faint while they pass the quote
-     early in the arc, and only reach full ink once they are clear of it. */
   @keyframes dg-koi-fade {
     0% { opacity: 0; }
-    55% { opacity: 1; }
-    78% { opacity: 1; }
+    40% { opacity: 1; }
+    72% { opacity: 1; }
     100% { opacity: 0; }
   }
 
   @media (max-width: 640px) {
     .dg-loading-orbit {
-      --dg-orbit-r: clamp(160px, 48vmin, 200px);
+      --dg-orbit-r: clamp(120px, 30vmin, 170px);
     }
 
     .dg-loading-koi {
-      height: clamp(92px, 28vmin, 140px);
+      height: clamp(150px, 62vmin, 260px);
     }
   }
 
@@ -216,13 +225,17 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     var hide = function () {
       el.classList.add("dg-loading-screen--hide");
       document.documentElement.classList.remove("dg-loading-lock");
+      // Matches the exit transition above, so the screen is not torn out
+      // mid-fade.
       setTimeout(function () {
         el.remove();
-      }, 600);
+      }, 1100);
     };
 
+    // Long enough for the koi sweep to finish (it lands at 3.75s) plus a
+    // beat to read the quote against them before the screen leaves.
     var minTime = new Promise(function (resolve) {
-      setTimeout(resolve, 3000);
+      setTimeout(resolve, 4000);
     });
     var pageLoad = new Promise(function (resolve) {
       if (document.readyState === "complete") resolve();
