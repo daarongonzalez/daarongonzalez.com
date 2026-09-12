@@ -1,0 +1,59 @@
+---
+import pluralsight from "@/assets/images/education/education-pluralsight.png";
+import madecraft from "@/assets/images/education/education-madecraft.png";
+import leland from "@/assets/images/education/education-leland.png";
+import stack from "@/assets/images/education/education-stack.png";
+
+interface Props {
+  eyebrow: string;
+  headingLines: string[];
+  body: string;
+  linkLabel: string;
+  linkHref: string;
+}
+
+const { eyebrow, headingLines, body, linkLabel, linkHref } = Astro.props;
+
+/* All four assets are square. The two stacked lockups carry the section so they
+   render large; the app icons render smaller to stay secondary to them.
+   The icon art already has its own rounded corners baked in — a CSS radius on
+   top of that clips into the colored field, so none is applied here. */
+const logos = [
+  { img: pluralsight, alt: "Pluralsight", shape: "lockup" },
+  { img: madecraft, alt: "Madecraft", shape: "lockup" },
+  { img: leland, alt: "Leland", shape: "icon" },
+  { img: stack, alt: "Stack", shape: "icon" },
+] as const;
+---
+
+<!-- No section rail here on purpose — this block sits quieter than the
+     numbered sections around it. -->
+<section id="education" class="mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
+  <div class="bento bokashi-cool flex flex-col gap-4 bg-brand-base p-8 sm:p-11">
+    <div class="text-[12.5px] font-bold uppercase tracking-[.2em] text-sun-base">{eyebrow}</div>
+    <div class="hd text-[38px] leading-[.94] text-cream">
+      {headingLines.map((line) => (<>{line}<br /></>))}
+    </div>
+    <p class="m-0 text-base leading-relaxed text-brand-lighter">{body}</p>
+    <a href={linkHref} class="mt-1 text-[14.5px] font-bold text-sun-base">{linkLabel}</a>
+  </div>
+
+  <div class="grid grid-cols-2 place-items-center gap-x-12 gap-y-10 sm:gap-y-[52px]">
+    {
+      logos.map(({ img, alt, shape }) => (
+        <img
+          src={img.src}
+          width={img.width}
+          height={img.height}
+          alt={alt}
+          loading="lazy"
+          class={
+            shape === "lockup"
+              ? "h-[88px] w-auto max-w-full object-contain sm:h-[118px]"
+              : "h-[62px] w-[62px] object-contain sm:h-[76px] sm:w-[76px]"
+          }
+        />
+      ))
+    }
+  </div>
+</section>

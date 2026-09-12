@@ -140,3 +140,24 @@ export const approach = [
       "Every engagement ends with your team able to maintain and extend the work — not dependent on outside help.",
   },
 ];
+
+/**
+ * Homepage playlist card. `preferredTrack` is matched against the live track
+ * titles from Spotify; the fallback copy renders when Spotify can't be reached,
+ * in which case the card links out instead of playing.
+ */
+export const playlist = {
+  id: "7tO8OmVfYNPLFhYZEl4wh4",
+  preferredTrack: "Family Business",
+  /** Shown before/instead of live data, so the card is never blank. */
+  fallbackName: "The Kid from Lindsay CA",
+  fallbackTrackTitle: "Family Business",
+};
+
+export const education = {
+  eyebrow: "Education",
+  headingLines: ["Developer", "educator"],
+  body: "I write the course, then I ship the thing the course is about. Years of curriculum for platforms that hold instructors to a standard — course libraries, live cohorts, and one-on-one coaching — which is why my workshops assume your team has real work to get back to.",
+  linkLabel: "See the courses →",
+  linkHref: "/about",
+};
