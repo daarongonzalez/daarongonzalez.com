@@ -100,10 +100,27 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     pointer-events: none;
     user-select: none;
 
+    /* The lower bound stays small on purpose. It is subtracted from the radius
+       budget below, so a high floor on a narrow screen squeezes the orbit until
+       the koi sit on top of the quote. */
+    --dg-koi-size: clamp(76px, 22vmin, 240px);
+
     /* Wide enough that the koi ride outside the quote block rather than
        across it — the sweep starts level with the quote, which is where the
        two would otherwise collide. */
-    --dg-orbit-r: clamp(200px, 36vmin, 340px);
+    --dg-orbit-want: clamp(200px, 36vmin, 340px);
+
+    /* The koi turn with the frame, so each sweeps a circle rather than sitting
+       still in its own box. The art is 560px tall and about 0.6 as wide, which
+       puts that circle at roughly 0.58 of the rendered height. */
+    --dg-koi-reach: calc(var(--dg-koi-size) * 0.58);
+
+    /* The sweep starts a quarter turn out, so the koi pass through the
+       horizontal extremes at the full radius before landing above and below
+       the quote. Radius plus reach therefore has to fit inside half the
+       *shorter* viewport axis, or the pair flies in from off-screen — which is
+       what a portrait phone was doing, where 36vmin reads off the width. */
+    --dg-orbit-r: min(var(--dg-orbit-want), calc(50vmin - var(--dg-koi-reach) - 12px));
 
     /* Start of the counter-clockwise sweep: a quarter turn ahead of the
        finish. CSS rotates clockwise, so the sweep runs down to 0. */
@@ -112,7 +129,7 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
 
   .dg-loading-koi {
     position: absolute;
-    height: clamp(110px, 22vmin, 240px);
+    height: var(--dg-koi-size);
     width: auto;
     /* The orbit frame is a zero-width point, so Tailwind's preflight rule of
        `img { max-width: 100% }` resolves to `max-width: 0` here and collapses
@@ -156,15 +173,11 @@ import koiSecondary from "@/assets/images/koi/koi-secondary.webp";
     100% { opacity: 0; }
   }
 
-  @media (max-width: 640px) {
-    .dg-loading-orbit {
-      --dg-orbit-r: clamp(160px, 48vmin, 200px);
-    }
-
-    .dg-loading-koi {
-      height: clamp(92px, 28vmin, 140px);
-    }
-  }
+  /* No separate small-screen rule. The old one set a radius of its own, which
+     is what put a portrait phone back on the wide corner-to-corner path the
+     orbit was meant to replace — 48vmin reads off the width there, leaving the
+     koi swinging out past the edges instead of circling the quote. The single
+     budgeted radius above now governs every width. */
 
   /* No sweep, no fade-out — the koi simply hold their landing positions. */
   @media (prefers-reduced-motion: reduce) {
