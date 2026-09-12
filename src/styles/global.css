@@ -202,3 +202,37 @@
     border-radius: 999px;
   }
 }
+
+@layer components {
+  /* Playlist card vinyl. Grooves are drawn rather than imaged so the disc
+     stays crisp at any size and costs no request. */
+  .playlist-disc {
+    position: relative;
+    background-image: repeating-radial-gradient(
+      circle at center,
+      rgba(247, 241, 227, 0.14) 0 1px,
+      transparent 1px 6px
+    );
+    animation: spin360 7s linear infinite;
+  }
+}
+
+@keyframes spin360 {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The disc is decoration — never spin it for anyone who asked us not to.
+   The slide out of the sleeve goes too, so play still reads as a state change
+   through the button glyph and the progress bar alone. */
+@media (prefers-reduced-motion: reduce) {
+  .playlist-disc {
+    animation: none;
+  }
+
+  .playlist-disc,
+  .playlist-disc-shift {
+    transition: none;
+  }
+}

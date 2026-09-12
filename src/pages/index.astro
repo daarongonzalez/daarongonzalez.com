@@ -9,16 +9,21 @@ import WorkCard from "@/components/WorkCard";
 import HomeBlogCard from "@/components/HomeBlogCard";
 import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
+import PlaylistCard from "@/components/PlaylistCard";
+import Education from "@/components/Education.astro";
 import BrushRule from "@/components/BrushRule.astro";
 import {
   services as defaultServices,
   aboutStats as defaultAboutStats,
   hero as defaultHero,
   reviewSets as defaultReviewSets,
+  playlist as playlistConfig,
+  education as defaultEducation,
 } from "@/data/site";
 import { projects } from "@/data/projects";
 import { getAllPosts, getSiteSettings } from "@/lib/sanity";
 import { pick, mergeReviewSets } from "@/lib/content";
+import { fetchPlaylist } from "@/lib/spotify";
 import heroHeadshot from "@/assets/images/hero-headshot.jpg";
 
 const featuredProjects = projects.filter((project) => project.featured);
@@ -26,6 +31,11 @@ const recentPosts = (await getAllPosts()).slice(0, 2);
 const blogTones = ["sun", "blue"] as const;
 
 const settings = await getSiteSettings();
+// Resolves to null if Spotify is slow or unreachable; the card handles that.
+const playlistData = await fetchPlaylist({
+  playlistId: playlistConfig.id,
+  preferredTrack: playlistConfig.preferredTrack,
+});
 const hero = {
   eyebrow: pick(settings?.hero?.eyebrow, defaultHero.eyebrow),
   lines: pick(settings?.hero?.lines, defaultHero.lines),
@@ -94,8 +104,15 @@ const homeCta = {
   </section>
 
   <!-- SERVICES -->
-  <section class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+  <section class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
     {services.map((service, i) => <ServiceCard number={`0${i + 1}`} {...service} />)}
+    <PlaylistCard
+      data={playlistData}
+      fallbackName={playlistConfig.fallbackName}
+      fallbackTrackTitle={playlistConfig.fallbackTrackTitle}
+      playlistUrl={`https://open.spotify.com/playlist/${playlistConfig.id}`}
+      client:load
+    />
   </section>
 
   <!-- ABOUT STRIP -->
@@ -113,6 +130,15 @@ const homeCta = {
       </div>
     </div>
   </section>
+
+  <!-- EDUCATION -->
+  <Education
+    eyebrow={defaultEducation.eyebrow}
+    headingLines={defaultEducation.headingLines}
+    body={defaultEducation.body}
+    linkLabel={defaultEducation.linkLabel}
+    linkHref={defaultEducation.linkHref}
+  />
 
   <!-- WORK -->
   <section id="work" class="mt-14 flex flex-col gap-8">
