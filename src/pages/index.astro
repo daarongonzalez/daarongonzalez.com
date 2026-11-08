@@ -21,12 +21,13 @@ import {
   education as defaultEducation,
   bookingUrl,
 } from "@/data/site";
-import { featuredWorkFeed } from "@/data/work";
+import { getWorkFeed } from "@/data/work";
 import { getAllPosts, getSiteSettings } from "@/lib/sanity";
 import { pick, mergeReviewSets } from "@/lib/content";
 import { fetchPlaylist } from "@/lib/spotify";
 import heroHeadshot from "@/assets/images/hero-headshot.jpg";
 
+const featuredWorkFeed = await getWorkFeed({ featured: true });
 const recentPosts = (await getAllPosts()).slice(0, 2);
 const blogTones = ["sun", "blue"] as const;
 

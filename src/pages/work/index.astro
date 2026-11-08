@@ -4,10 +4,11 @@ import SectionRail from "@/components/SectionRail.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import WorkFeedCard from "@/components/WorkFeedCard";
 import CTAPanel from "@/components/CTAPanel";
-import { workFeed } from "@/data/work";
+import { getWorkFeed } from "@/data/work";
 import { bookingUrl } from "@/data/site";
 
-export const prerender = true;
+// Rendered on each request so new work published in Sanity shows up right away.
+const workFeed = await getWorkFeed();
 
 // Wide workshop thumbnails span two columns; the dense flow tucks single-column
 // cards into any gaps that leaves behind.

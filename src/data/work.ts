@@ -1,4 +1,5 @@
 import { projects, type Project } from "@/data/projects";
+import { getProjects, getWorkshops, getSessionPhotos } from "@/lib/sanity";
 import firstProductClaudeCode from "@/assets/images/work/workshop-first-product-claude-code.webp";
 import claudeSkills from "@/assets/images/work/workshop-claude-skills.webp";
 import intermediateClaudeCode from "@/assets/images/work/workshop-intermediate-claude-code.webp";
@@ -28,6 +29,7 @@ export interface SessionPhoto {
   featured: boolean;
 }
 
+/** Local defaults, used until Sanity has workshops. */
 export const workshops: Workshop[] = [
   {
     title: "Building and Deploying your First Product with Claude Code",
@@ -80,6 +82,7 @@ export const workshops: Workshop[] = [
   },
 ];
 
+/** Local defaults, used until Sanity has session photos. */
 export const sessionPhotos: SessionPhoto[] = [
   {
     caption: "Live session at Silicon Slopes, Utah",
@@ -123,18 +126,40 @@ function interleave(groups: WorkItem[][]): WorkItem[] {
     .map(({ item }) => item);
 }
 
-function buildFeed(onlyFeatured: boolean): WorkItem[] {
-  const keep = <T extends { featured: boolean }>(list: T[]) =>
-    onlyFeatured ? list.filter((entry) => entry.featured) : list;
-  return interleave([
-    // Projects without a screenshot yet stay off the showcase until they have one.
-    keep(projects.filter((project) => project.image)).map((project) => ({ kind: "project" as const, project })),
-    keep(workshops).map((workshop) => ({ kind: "workshop" as const, workshop })),
-    keep(sessionPhotos).map((photo) => ({ kind: "photo" as const, photo })),
-  ]);
+const featuredOnly = <T extends { featured: boolean }>(list: T[]) => list.filter((entry) => entry.featured);
+
+/**
+ * Sanity is the source of truth for Work. Each group falls back to the local
+ * defaults above when Sanity has none of that type yet, or can't be reached, so
+ * the section never renders empty.
+ */
+async function loadGroup<T>(fetcher: () => Promise<T[]>, fallback: T[]): Promise<T[]> {
+  try {
+    const fetched = await fetcher();
+    return fetched.length ? fetched : fallback;
+  } catch (error) {
+    console.error("Falling back to local Work content:", error);
+    return fallback;
+  }
 }
 
-/** Homepage row: featured items only. */
-export const featuredWorkFeed = buildFeed(true);
-/** /work page: everything. */
-export const workFeed = buildFeed(false);
+/** Every project, from Sanity when available. Used by the feed and case-study pages. */
+export function loadProjects(): Promise<Project[]> {
+  return loadGroup(getProjects, projects);
+}
+
+export async function getWorkFeed({ featured = false } = {}): Promise<WorkItem[]> {
+  const [allProjects, allWorkshops, allPhotos] = await Promise.all([
+    loadProjects(),
+    loadGroup(getWorkshops, workshops),
+    loadGroup(getSessionPhotos, sessionPhotos),
+  ]);
+  // Projects without a screenshot yet stay off the showcase until they have one.
+  const showcaseProjects = allProjects.filter((project) => project.image);
+  const pick = <T extends { featured: boolean }>(list: T[]) => (featured ? featuredOnly(list) : list);
+  return interleave([
+    pick(showcaseProjects).map((project) => ({ kind: "project" as const, project })),
+    pick(allWorkshops).map((workshop) => ({ kind: "workshop" as const, workshop })),
+    pick(allPhotos).map((photo) => ({ kind: "photo" as const, photo })),
+  ]);
+}
