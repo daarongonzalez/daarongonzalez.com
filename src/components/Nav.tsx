@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
-import type { NavLink } from "@/data/site";
+import { bookingUrl, type NavLink } from "@/data/site";
 
 export default function Nav({
   currentPath = "",
@@ -12,7 +12,7 @@ export default function Nav({
   const [open, setOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href === "/#work") return currentPath.startsWith("/work");
+    if (href === "/work") return currentPath.startsWith("/work");
     return currentPath === href || (href === "/" && currentPath === "");
   };
 
@@ -35,7 +35,7 @@ export default function Nav({
       </div>
 
       <div className="hidden md:block">
-        <Button href="/#contact" variant="primary">
+        <Button href={bookingUrl} variant="primary">
           Book a Call
         </Button>
       </div>
@@ -68,7 +68,7 @@ export default function Nav({
               {link.label}
             </a>
           ))}
-          <Button href="/#contact" variant="primary" className="justify-center">
+          <Button href={bookingUrl} variant="primary" className="justify-center">
             Book a Call
           </Button>
         </div>

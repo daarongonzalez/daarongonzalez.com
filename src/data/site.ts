@@ -8,10 +8,13 @@ export interface NavLink {
 
 export const navLinks: NavLink[] = [
   { label: "About", href: "/about" },
-  { label: "Work", href: "/#work" },
+  { label: "Work", href: "/work" },
   { label: "Blog", href: "/blog" },
   { label: "Events", href: "/events" },
 ];
+
+/** Main booking link for every "Book a Call" button on the site. */
+export const bookingUrl = "https://cal.com/daaron/intro-call-daaron";
 
 export const services = [
   {

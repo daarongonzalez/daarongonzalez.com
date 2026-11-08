@@ -5,7 +5,7 @@ import ServiceCard from "@/components/ServiceCard";
 import StatTile from "@/components/StatTile";
 import SectionRail from "@/components/SectionRail.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
-import WorkCard from "@/components/WorkCard";
+import WorkFeedCard from "@/components/WorkFeedCard";
 import HomeBlogCard from "@/components/HomeBlogCard";
 import ReviewBand from "@/components/ReviewBand";
 import CTAPanel from "@/components/CTAPanel";
@@ -19,14 +19,14 @@ import {
   reviewSets as defaultReviewSets,
   playlist as playlistConfig,
   education as defaultEducation,
+  bookingUrl,
 } from "@/data/site";
-import { projects } from "@/data/projects";
+import { featuredWorkFeed } from "@/data/work";
 import { getAllPosts, getSiteSettings } from "@/lib/sanity";
 import { pick, mergeReviewSets } from "@/lib/content";
 import { fetchPlaylist } from "@/lib/spotify";
 import heroHeadshot from "@/assets/images/hero-headshot.jpg";
 
-const featuredProjects = projects.filter((project) => project.featured);
 const recentPosts = (await getAllPosts()).slice(0, 2);
 const blogTones = ["sun", "blue"] as const;
 
@@ -50,7 +50,7 @@ const homeAboutStrip = pick(
 );
 const homeSections = {
   workHeading: pick(settings?.homeSections?.workHeading, "Work I've done"),
-  workBlurb: pick(settings?.homeSections?.workBlurb, "A few of the builds I've taken clients through, start to ship."),
+  workBlurb: pick(settings?.homeSections?.workBlurb, "Products I've built, workshops I've led, and a few moments from the room."),
   blogHeading: pick(settings?.homeSections?.blogHeading, "Writing & notes"),
   blogBlurb: pick(
     settings?.homeSections?.blogBlurb,
@@ -86,7 +86,7 @@ const homeCta = {
           </div>
           <p class="m-0 max-w-[420px] text-[17px] leading-[1.55] text-brand-lighter">{hero.body}</p>
           <div class="mt-1 flex flex-wrap gap-3">
-            <Button href="#contact" variant="accent">Book a Call</Button>
+            <Button href={bookingUrl} variant="accent">Book a Call</Button>
             <Button href="#work" variant="outline-light">See my work</Button>
           </div>
         </div>
@@ -143,7 +143,7 @@ const homeCta = {
   <!-- WORK -->
   <section id="work" class="mt-14 flex flex-col gap-8">
     <div class="flex flex-col gap-[18px]">
-      <SectionRail label="02 / WORK" linkLabel="View all →" linkHref="#work" />
+      <SectionRail label="02 / WORK" linkLabel="View all →" linkHref="/work" />
       <SectionHeading heading={homeSections.workHeading} blurb={homeSections.workBlurb}>
         <div class="flex gap-3.5">
           <button
@@ -165,8 +165,8 @@ const homeCta = {
         </div>
       </SectionHeading>
     </div>
-    <div id="work-row" class="flex flex-nowrap gap-6 overflow-x-auto pb-2" style="scroll-behavior: smooth">
-      {featuredProjects.map((project) => <WorkCard project={project} />)}
+    <div id="work-row" class="flex flex-nowrap items-stretch gap-6 overflow-x-auto pb-2" style="scroll-behavior: smooth">
+      {featuredWorkFeed.map((item) => <WorkFeedCard item={item} layout="row" />)}
     </div>
   </section>
 
@@ -195,7 +195,7 @@ const homeCta = {
       title={homeCta.title}
       description={homeCta.description}
       buttonLabel={homeCta.buttonLabel}
-      buttonHref="#contact"
+      buttonHref={bookingUrl}
       tone="cream"
       padding="p-12"
       headingClassName="text-[40px] leading-none"

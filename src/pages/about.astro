@@ -4,7 +4,7 @@ import SectionRail from "@/components/SectionRail.astro";
 import TimelineCard from "@/components/TimelineCard";
 import ApproachCard from "@/components/ApproachCard";
 import CTAPanel from "@/components/CTAPanel";
-import { timeline as defaultTimeline, approach as defaultApproach } from "@/data/site";
+import { timeline as defaultTimeline, approach as defaultApproach, bookingUrl } from "@/data/site";
 import { getSiteSettings } from "@/lib/sanity";
 import { pick } from "@/lib/content";
 import aboutPhoto from "@/assets/images/about-photo.jpg";
@@ -75,7 +75,7 @@ const aboutCta = {
       title={aboutCta.title}
       description={aboutCta.description}
       buttonLabel={aboutCta.buttonLabel}
-      buttonHref="/#contact"
+      buttonHref={bookingUrl}
     />
   </section>
 </Layout>
