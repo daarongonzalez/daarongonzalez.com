@@ -211,6 +211,7 @@ export async function getWorkshops(): Promise<Workshop[]> {
     eyebrow: doc.eyebrow ?? "Workshop",
     description: doc.description,
     image: imageUrl(doc.thumbnail, 1200),
+    aspectRatio: doc.thumbnail?.aspectRatio,
     url: doc.url,
     featured: Boolean(doc.featured),
   }));

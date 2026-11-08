@@ -7,6 +7,12 @@ import claudeCowork from "@/assets/images/work/workshop-claude-cowork.webp";
 import pluralsightSummit from "@/assets/images/work/photo-pluralsight-author-summit.webp";
 import siliconSlopesStage from "@/assets/images/work/photo-silicon-slopes-stage.webp";
 import siliconSlopesDesk from "@/assets/images/work/photo-silicon-slopes-desk.webp";
+import skill1 from "@/assets/images/work/workshop-skill-1-visualizing-and-writing.webp";
+import skill2 from "@/assets/images/work/workshop-skill-2-brand-and-design.webp";
+import skill3 from "@/assets/images/work/workshop-skill-3-data-and-development.webp";
+import skill4 from "@/assets/images/work/workshop-skill-4-secure-and-deploy.webp";
+
+const ratio = (image: { width: number; height: number }) => image.width / image.height;
 
 export interface Workshop {
   title: string;
@@ -15,6 +21,8 @@ export interface Workshop {
   description?: string;
   /** Session thumbnail. Without one, the card draws a branded title panel instead. */
   image?: string;
+  /** Width ÷ height of the thumbnail, so its card frame matches it exactly. */
+  aspectRatio?: number;
   /** Recording, sign-up or recap page. Without one, the card isn't a link. */
   url?: string;
   /** Show on the homepage "Work" row. */
@@ -55,27 +63,35 @@ export const workshops: Workshop[] = [
     image: claudeCowork.src,
     featured: true,
   },
-  // Four-part build series, January 2025. Thumbnails still to be added.
+  // Four-part build series, January 2025.
   {
     title: "Visualizing and Writing",
+    image: skill1.src,
+    aspectRatio: ratio(skill1),
     eyebrow: "Skill #1 · Jan 10, 2025",
     description: "Practice clearly communicating your idea, and mapping your build.",
     featured: false,
   },
   {
     title: "Brand and Design",
+    image: skill2.src,
+    aspectRatio: ratio(skill2),
     eyebrow: "Skill #2 · Jan 17, 2025",
     description: "Use Figma to practice hierarchy, color theory, layout, and build a design system.",
     featured: false,
   },
   {
     title: "Data and Development",
+    image: skill3.src,
+    aspectRatio: ratio(skill3),
     eyebrow: "Skill #3 · Jan 24, 2025",
     description: "Develop your designs, use popular stacks, set up version control, and design a database.",
     featured: false,
   },
   {
     title: "Secure and Deploy",
+    image: skill4.src,
+    aspectRatio: ratio(skill4),
     eyebrow: "Skill #4 · Jan 31, 2025",
     description: "Understand all costs associated with hosting, run a security checklist, and deploy.",
     featured: false,
