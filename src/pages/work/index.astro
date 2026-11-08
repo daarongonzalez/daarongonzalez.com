@@ -1,0 +1,46 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SectionRail from "@/components/SectionRail.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import WorkFeedCard from "@/components/WorkFeedCard";
+import CTAPanel from "@/components/CTAPanel";
+import { getWorkFeed } from "@/data/work";
+import { bookingUrl } from "@/data/site";
+
+// Rendered on each request so new work published in Sanity shows up right away.
+const workFeed = await getWorkFeed();
+
+// Wide workshop thumbnails span two columns; the dense flow tucks single-column
+// cards into any gaps that leaves behind.
+const span = (kind: string) => (kind === "workshop" ? "sm:col-span-2" : "");
+---
+
+<Layout
+  title="Work"
+  description="Products D'Aaron has built, workshops he has led, and moments from live sessions."
+>
+  <section class="mt-5 flex flex-col gap-[18px]">
+    <SectionRail label="01 / WORK" linkLabel="← Home" linkHref="/" />
+    <SectionHeading
+      heading="Builds, workshops & sessions"
+      blurb="Products I've built, workshops I've led, and a few moments from the room."
+    />
+  </section>
+
+  <section class="mt-7 grid grid-flow-row-dense grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    {workFeed.map((item) => (
+      <div class={span(item.kind)}>
+        <WorkFeedCard item={item} layout="grid" />
+      </div>
+    ))}
+  </section>
+
+  <section class="mt-10">
+    <CTAPanel
+      title="Want a workshop for your team?"
+      description="We'll shape a session around the tools and goals your team already has."
+      buttonLabel="Book a Call"
+      buttonHref={bookingUrl}
+    />
+  </section>
+</Layout>

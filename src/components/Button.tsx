@@ -21,8 +21,14 @@ export default function Button({
   className = "",
   ...props
 }: ButtonProps) {
+  // Links off-site (like the booking page) open in a new tab so the visitor keeps their place here.
+  const external = typeof props.href === "string" && /^https?:\/\//.test(props.href);
   return (
-    <a className={`pill-btn ${variantClasses[variant]} ${className}`} {...props}>
+    <a
+      className={`pill-btn ${variantClasses[variant]} ${className}`}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...props}
+    >
       {children}
     </a>
   );

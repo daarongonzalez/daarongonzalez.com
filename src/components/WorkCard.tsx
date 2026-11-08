@@ -2,11 +2,18 @@ import ImagePlaceholder from "./ImagePlaceholder";
 import TagPill from "./TagPill";
 import type { Project } from "@/data/projects";
 
-export default function WorkCard({ project }: { project: Project }) {
+export default function WorkCard({
+  project,
+  className = "w-[340px] flex-none",
+}: {
+  project: Project;
+  /** Sizing — defaults to the fixed width used in the homepage scroller. */
+  className?: string;
+}) {
   return (
     <a
       href={`/work/${project.slug}`}
-      className="bento flex w-[340px] flex-none flex-col overflow-hidden bg-cream text-inherit no-underline"
+      className={`bento flex flex-col overflow-hidden bg-cream text-inherit no-underline ${className}`}
     >
       {project.image ? (
         <img src={project.image} alt={project.imageLabel} className="h-[200px] w-full object-cover" />

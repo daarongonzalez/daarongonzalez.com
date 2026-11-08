@@ -4,21 +4,22 @@ import ImagePlaceholder from "@/components/ImagePlaceholder";
 import TagPill from "@/components/TagPill";
 import SectionRail from "@/components/SectionRail.astro";
 import { ProblemSolution, Gallery, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
-import { projects, getAdjacentProjects, type Project } from "@/data/projects";
+import { loadProjects } from "@/data/work";
 
-export const prerender = true;
-
-export function getStaticPaths() {
-  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+// Rendered on each request so projects added or edited in Sanity show up right away.
+const allProjects = await loadProjects();
+const index = allProjects.findIndex((entry) => entry.slug === Astro.params.slug);
+if (index === -1) {
+  return Astro.redirect("/work");
 }
-
-const { project } = Astro.props as { project: Project };
-const { previous, next } = getAdjacentProjects(project.slug);
+const project = allProjects[index];
+const previous = allProjects[index - 1];
+const next = allProjects[index + 1];
 const cs = project.caseStudy;
 ---
 
 <Layout title={project.title} description={cs?.description ?? project.shortDescription}>
-  <a href="/#work" class="mt-2 inline-block text-sm font-bold">← Back to work</a>
+  <a href="/work" class="mt-2 inline-block text-sm font-bold">← Back to work</a>
 
   <!-- HERO -->
   <section class="mt-4">

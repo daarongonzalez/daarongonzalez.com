@@ -41,6 +41,7 @@ export interface Project {
   };
 }
 
+/** Local defaults, used until Sanity has projects. */
 export const projects: Project[] = [
   {
     slug: "marion-plastic-surgery",
@@ -112,19 +113,3 @@ export const projects: Project[] = [
     featured: true,
   },
 ];
-
-export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((project) => project.slug === slug);
-}
-
-export function getAdjacentProjects(slug: string): {
-  previous?: Project;
-  next?: Project;
-} {
-  const index = projects.findIndex((project) => project.slug === slug);
-  if (index === -1) return {};
-  return {
-    previous: projects[index - 1],
-    next: projects[index + 1],
-  };
-}
