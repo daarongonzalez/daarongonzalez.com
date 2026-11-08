@@ -9,6 +9,9 @@ import type { SessionPhoto, WorkItem, Workshop } from "@/data/work";
  */
 type Layout = "row" | "grid";
 
+/** Shape of the Stack session thumbnails; used for title panels and images of unknown size. */
+const DEFAULT_THUMBNAIL_RATIO = 1024 / 366;
+
 export default function WorkFeedCard({ item, layout }: { item: WorkItem; layout: Layout }) {
   if (item.kind === "project") {
     return (
@@ -26,8 +29,11 @@ function WorkshopCard({ workshop, layout }: { workshop: Workshop; layout: Layout
   const size = layout === "row" ? "w-[min(560px,85vw)] flex-none" : "h-full w-full";
   const body = (
     <>
-      {/* Session thumbnails are ~2.8:1, so the frame keeps that ratio to show them uncropped. */}
-      <div className="aspect-[1024/366] w-full overflow-hidden bg-brand-base">
+      {/* The frame takes each thumbnail's own proportions so none of it is cropped. */}
+      <div
+        className="w-full overflow-hidden bg-brand-base"
+        style={{ aspectRatio: workshop.aspectRatio ?? DEFAULT_THUMBNAIL_RATIO }}
+      >
         {workshop.image ? (
           <img src={workshop.image} alt={workshop.title} className="h-full w-full object-cover" loading="lazy" />
         ) : (
