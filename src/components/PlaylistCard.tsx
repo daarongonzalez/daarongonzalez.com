@@ -124,7 +124,7 @@ export default function PlaylistCard({
               aria-pressed={playing}
               className="flex h-[34px] w-[34px] flex-none cursor-pointer items-center justify-center rounded-full bg-sun-base text-xs text-ink-darker transition-transform duration-150 hover:scale-[1.07]"
             >
-              {playing ? "❚❚" : "▶"}
+              {playing ? <PauseIcon /> : <PlayIcon />}
             </button>
           ) : (
             <a
@@ -134,7 +134,7 @@ export default function PlaylistCard({
               aria-label={`Open ${name} on Spotify`}
               className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-sun-base text-xs text-ink-darker transition-transform duration-150 hover:scale-[1.07]"
             >
-              ▶
+              <PlayIcon />
             </a>
           )}
 
@@ -156,5 +156,24 @@ export default function PlaylistCard({
         <audio ref={audioRef} src={track.previewUrl} preload="none" className="hidden" />
       )}
     </div>
+  );
+}
+
+// Drawn icons rather than "▶" / "❚❚" text: iOS swaps those characters for its
+// colour emoji, so the button looked different on phones than on desktop.
+function PlayIcon() {
+  return (
+    <svg viewBox="0 0 12 12" aria-hidden="true" className="ml-[2px] h-3 w-3 fill-current">
+      <path d="M2.5 1.2v9.6c0 .5.5.8.9.5l7.4-4.8c.4-.3.4-.8 0-1L3.4.7c-.4-.3-.9 0-.9.5z" />
+    </svg>
+  );
+}
+
+function PauseIcon() {
+  return (
+    <svg viewBox="0 0 12 12" aria-hidden="true" className="h-3 w-3 fill-current">
+      <rect x="2" y="1.5" width="3" height="9" rx="1" />
+      <rect x="7" y="1.5" width="3" height="9" rx="1" />
+    </svg>
   );
 }
