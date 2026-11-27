@@ -116,9 +116,25 @@ const project = defineType({
         defineField({
           name: 'body',
           title: 'Story',
-          description: 'Optional long-form write-up, shown after The Problem / The Solution.',
+          description:
+            'Optional long-form write-up, shown after The Problem / The Solution. Images split the story into sections and show full width between them.',
           type: 'array',
-          of: [{ type: 'block' }, { type: 'image' }],
+          of: [
+            { type: 'block' },
+            defineArrayMember({
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alternative Text',
+                  type: 'string',
+                  description: 'Describe the image for screen readers.',
+                }),
+                defineField({ name: 'caption', type: 'string', description: 'Optional. Shown under the image.' }),
+              ],
+            }),
+          ],
         }),
         defineField({
           name: 'photos',

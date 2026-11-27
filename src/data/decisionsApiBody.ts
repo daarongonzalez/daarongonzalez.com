@@ -1,6 +1,13 @@
 // Long-form story for the "Getting Started with the Decisions API" case study,
 // written as Portable Text so the local fallback renders the same way Sanity content does.
-// No imports here on purpose: the same blocks can be copied into Sanity as-is.
+// No imports here on purpose: the caller passes in the three images, so the same text
+// blocks can be copied into Sanity as-is (where the images are asset references instead).
+
+export interface BodyImageInput {
+  src: string;
+  width: number;
+  height: number;
+}
 
 let keyCount = 0;
 const key = () => `dapi${(keyCount++).toString(36)}`;
@@ -33,14 +40,23 @@ const link = (before: string, linkText: string, href: string, after: string) => 
   };
 };
 const numbered = (items: string[]) => items.map((item) => block(item, "normal", "number"));
+const image = (input: BodyImageInput, alt: string, caption: string) => ({
+  _type: "image",
+  _key: key(),
+  src: input.src,
+  aspectRatio: input.width / input.height,
+  alt,
+  caption,
+});
 
-export const decisionsApiBody = [
+export const buildDecisionsApiBody = (images: {
+  slide: BodyImageInput;
+  presenting: BodyImageInput;
+  group: BodyImageInput;
+}) => [
   h2("Why I hosted this"),
   p(
     "As AI Instructor for Leland's AI Builder Program, I hosted a Codex Community event at Leland HQ in Lehi, Utah, all about the OpenAI Decisions API.",
-  ),
-  p(
-    "The people in the room were early in their builder journeys. They were starting to build software, but speed, token efficiency and cost were still new ideas. For most of them, this was a first step into decision models.",
   ),
 
   h2("What a decision model does"),
@@ -56,6 +72,12 @@ export const decisionsApiBody = [
   ]),
   p(
     "Answers always come back in the same shape, so your code can act on them directly. There's no charge for the answer itself, so cost mostly depends on how much evidence you send.",
+  ),
+
+  image(
+    images.slide,
+    "Slide titled Same job. Write questions instead., showing three steps: write the questions, send the evidence, read typed answers",
+    "One slide from the talk: the same job, written as questions.",
   ),
 
   h2("The traditional way: Airbnb's policy classifier"),
@@ -88,6 +110,12 @@ export const decisionsApiBody = [
     ", by Clay Gibson and Adel Elmalaha, Airbnb Engineering & Data Science.",
   ),
 
+  image(
+    images.presenting,
+    "D'Aaron presenting a slide about Airbnb's policy classifier to a seated audience",
+    "Walking the room through Airbnb's policy classifier.",
+  ),
+
   h2("What I built with Codex: Builders Review"),
   p("At Leland, instructors reviewed every learner portfolio by hand against the same four checks:"),
   ...bullets([
@@ -108,6 +136,16 @@ export const decisionsApiBody = [
   ]),
   p(
     "Before trusting it, I ran it on portfolios instructors had already graded and read every case where it disagreed.",
+  ),
+
+  h2("Who was in the room"),
+  p(
+    "The people in the room were early in their builder journeys. They were starting to build software, but speed, token efficiency and cost were still new ideas. For most of them, this was a first step into decision models.",
+  ),
+  image(
+    images.group,
+    "Group photo of attendees at the Codex Community event at Leland HQ in Lehi, Utah",
+    "Codex Community at Leland HQ. Thanks to everyone who came out.",
   ),
 
   h2("Your turn"),

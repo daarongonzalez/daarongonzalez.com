@@ -5,25 +5,10 @@ import rapidschemaHero from "@/assets/images/rapidschema-hero.png";
 import rapidschemaSchemaEditor from "@/assets/images/rapidschema-schema-editor.png";
 import decisionsApiThumb from "@/assets/images/decisions-api-thumb.webp";
 import decisionsApiHero from "@/assets/images/decisions-api-hero.webp";
-import decisionsSlide1 from "@/assets/images/decisions-api-slide-1.webp";
-import decisionsSlide3 from "@/assets/images/decisions-api-slide-3.webp";
-import decisionsSlide4 from "@/assets/images/decisions-api-slide-4.webp";
 import decisionsSlide5 from "@/assets/images/decisions-api-slide-5.webp";
-import decisionsSlide6 from "@/assets/images/decisions-api-slide-6.webp";
-import decisionsSlide7 from "@/assets/images/decisions-api-slide-7.webp";
-import decisionsSlide9 from "@/assets/images/decisions-api-slide-9.webp";
-import decisionsSlide10 from "@/assets/images/decisions-api-slide-10.webp";
-import decisionsSlide13 from "@/assets/images/decisions-api-slide-13.webp";
 import lelandGroup from "@/assets/images/work/photo-leland-codex-group.webp";
-import lelandTitleSlide from "@/assets/images/work/photo-leland-codex-title-slide.webp";
 import lelandPolicyClassifier from "@/assets/images/work/photo-leland-codex-policy-classifier.webp";
-import lelandAnswerShapes from "@/assets/images/work/photo-leland-codex-answer-shapes.webp";
-import lelandEvidenceBundle from "@/assets/images/work/photo-leland-codex-evidence-bundle.webp";
-import { decisionsApiBody } from "@/data/decisionsApiBody";
-
-const ratio = (image: { width: number; height: number }) => image.width / image.height;
-const orientation = (image: { width: number; height: number }) =>
-  image.height > image.width ? ("portrait" as const) : ("landscape" as const);
+import { buildDecisionsApiBody } from "@/data/decisionsApiBody";
 
 export interface ProjectTag {
   label: string;
@@ -111,51 +96,12 @@ export const projects: Project[] = [
       solutionLabel: "The Solution",
       solution:
         "The Decisions API is made for these questions. Write one question per criterion, send the evidence, and get a typed answer back (a yes or no, a category or a score) with a probability for each. I showed the room how it works, then demoed a portfolio grader I built with Codex.",
-      body: decisionsApiBody,
-      photos: [
-        {
-          src: lelandGroup.src,
-          alt: "Group photo of attendees at the Codex Community event at Leland HQ in Lehi, Utah",
-          caption: "Codex Community at Leland HQ",
-          orientation: orientation(lelandGroup),
-        },
-        {
-          src: lelandTitleSlide.src,
-          alt: "D'Aaron opening the session in front of a seated audience",
-          caption: "Opening the session",
-          orientation: orientation(lelandTitleSlide),
-        },
-        {
-          src: lelandPolicyClassifier.src,
-          alt: "D'Aaron presenting a slide about Airbnb's policy classifier",
-          caption: "Walking through Airbnb's policy classifier",
-          orientation: orientation(lelandPolicyClassifier),
-        },
-        {
-          src: lelandAnswerShapes.src,
-          alt: "D'Aaron presenting the three shapes of answer the Decisions API returns",
-          caption: "The three shapes of answer",
-          orientation: orientation(lelandAnswerShapes),
-        },
-        {
-          src: lelandEvidenceBundle.src,
-          alt: "D'Aaron presenting a slide showing one request returning twelve answers",
-          caption: "One evidence bundle, twelve answers",
-          orientation: orientation(lelandEvidenceBundle),
-        },
-      ],
-      galleryHeading: "Slides from the session",
-      gallery: [
-        { label: "Classifiers without the training pipeline", src: decisionsSlide1.src, aspectRatio: ratio(decisionsSlide1) },
-        { label: "Evidence in, a defined answer out", src: decisionsSlide3.src, aspectRatio: ratio(decisionsSlide3) },
-        { label: "Airbnb's policy classifier, built the traditional way", src: decisionsSlide4.src, aspectRatio: ratio(decisionsSlide4) },
-        { label: "The same job, written as questions", src: decisionsSlide5.src, aspectRatio: ratio(decisionsSlide5) },
-        { label: "Three shapes of answer", src: decisionsSlide6.src, aspectRatio: ratio(decisionsSlide6) },
-        { label: "One evidence bundle, twelve answers", src: decisionsSlide7.src, aspectRatio: ratio(decisionsSlide7) },
-        { label: "Four checks, all required", src: decisionsSlide9.src, aspectRatio: ratio(decisionsSlide9) },
-        { label: "The browser captures, the Decisions API judges", src: decisionsSlide10.src, aspectRatio: ratio(decisionsSlide10) },
-        { label: "Uncertain answers go to a person", src: decisionsSlide13.src, aspectRatio: ratio(decisionsSlide13) },
-      ],
+      body: buildDecisionsApiBody({
+        slide: decisionsSlide5,
+        presenting: lelandPolicyClassifier,
+        group: lelandGroup,
+      }),
+      gallery: [],
       results: [
         { value: "0.9s", label: "To grade one portfolio" },
         { value: "10.5s", label: "For a full run, from capture to verdict" },
