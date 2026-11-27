@@ -101,12 +101,51 @@ const project = defineType({
       group: 'caseStudy',
       description: 'Optional. Without it, the project page shows the card details only.',
       fields: [
+        defineField({
+          name: 'eyebrow',
+          description: 'Optional line above the title, e.g. "Codex Community · Leland HQ, Lehi, UT · November 2026".',
+          type: 'string',
+        }),
+        defineField({ name: 'subtitle', description: 'Optional line under the title.', type: 'string' }),
         defineField({ name: 'description', type: 'text', rows: 3 }),
         imageWithAlt('heroImage'),
         defineField({ name: 'problemLabel', type: 'string', initialValue: 'The Problem' }),
         defineField({ name: 'problem', type: 'text', rows: 3 }),
         defineField({ name: 'solutionLabel', type: 'string', initialValue: 'The Solution' }),
         defineField({ name: 'solution', type: 'text', rows: 3 }),
+        defineField({
+          name: 'body',
+          title: 'Story',
+          description: 'Optional long-form write-up, shown after The Problem / The Solution.',
+          type: 'array',
+          of: [{ type: 'block' }, { type: 'image' }],
+        }),
+        defineField({
+          name: 'photos',
+          description: 'Optional event or project photos. Portrait and landscape both work.',
+          type: 'array',
+          of: [
+            defineArrayMember({
+              type: 'image',
+              name: 'caseStudyPhoto',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alternative Text',
+                  type: 'string',
+                  description: 'Describe the image for screen readers.',
+                }),
+                defineField({ name: 'caption', type: 'string', description: 'Optional. Shown under the photo.' }),
+              ],
+            }),
+          ],
+        }),
+        defineField({
+          name: 'galleryHeading',
+          description: 'Optional heading over the gallery. Defaults to "Process & screens".',
+          type: 'string',
+        }),
         defineField({
           name: 'gallery',
           title: 'Process & screens',
@@ -142,6 +181,11 @@ const project = defineType({
               preview: { select: { title: 'value', subtitle: 'label' } },
             }),
           ],
+        }),
+        defineField({
+          name: 'resultsNote',
+          description: 'Optional short note under the results, e.g. how the numbers were measured.',
+          type: 'string',
         }),
       ],
     }),

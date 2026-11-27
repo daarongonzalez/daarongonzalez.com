@@ -1,7 +1,7 @@
 import { sanityClient } from "sanity:client";
 import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 import type { Review } from "@/data/site";
-import type { Project } from "@/data/projects";
+import { WIDE_RATIO, type Project } from "@/data/projects";
 import type { Workshop, SessionPhoto } from "@/data/work";
 
 const builder = createImageUrlBuilder(sanityClient);
@@ -130,9 +130,11 @@ const projectProjection = `{
   tags[]{ label, tone },
   thumbnail{ ${imageFields} },
   caseStudy{
-    description, problemLabel, problem, solutionLabel, solution,
+    eyebrow, subtitle, description, problemLabel, problem, solutionLabel, solution,
     heroImage{ ${imageFields} },
-    gallery[]{ label, image },
+    body, galleryHeading, resultsNote,
+    photos[]{ ${imageFields}, caption },
+    gallery[]{ label, image{ ${imageFields} } },
     results[]{ value, label }
   }
 }`;
@@ -145,14 +147,20 @@ interface FetchedProject {
   tags?: { label: string; tone?: "blue" | "sun" }[];
   thumbnail?: SanityImageWithAlt;
   caseStudy?: {
+    eyebrow?: string;
+    subtitle?: string;
     description?: string;
     heroImage?: SanityImageWithAlt;
     problemLabel?: string;
     problem?: string;
     solutionLabel?: string;
     solution?: string;
-    gallery?: { label: string; image?: SanityImageSource }[];
+    gallery?: { label: string; image?: SanityImageWithAlt }[];
     results?: { value: string; label: string }[];
+    body?: unknown[];
+    photos?: (SanityImageWithAlt & { caption?: string })[];
+    galleryHeading?: string;
+    resultsNote?: string;
   };
 }
 
@@ -179,8 +187,26 @@ function toProject(doc: FetchedProject): Project {
             problem: cs.problem ?? "",
             solutionLabel: cs.solutionLabel ?? "The Solution",
             solution: cs.solution ?? "",
-            gallery: (cs.gallery ?? []).map((item) => ({ label: item.label, src: imageUrl(item.image, 1000) })),
+            gallery: (cs.gallery ?? []).map((item) => {
+              const aspectRatio = item.image?.aspectRatio;
+              // Wide slides are shown whole and larger, so fetch them a bit sharper.
+              const width = aspectRatio && aspectRatio >= WIDE_RATIO ? 1400 : 1000;
+              return { label: item.label, src: imageUrl(item.image, width), aspectRatio };
+            }),
             results: cs.results ?? [],
+            eyebrow: cs.eyebrow || undefined,
+            subtitle: cs.subtitle || undefined,
+            body: cs.body?.length ? cs.body : undefined,
+            photos: (cs.photos ?? [])
+              .filter((photo) => photo.asset)
+              .map((photo) => ({
+                src: imageUrl(photo, 1000)!,
+                alt: photo.alt ?? photo.caption ?? `${doc.title} photo`,
+                caption: photo.caption || undefined,
+                orientation: (photo.aspectRatio ?? 1) < 1 ? ("portrait" as const) : ("landscape" as const),
+              })),
+            galleryHeading: cs.galleryHeading || undefined,
+            resultsNote: cs.resultsNote || undefined,
           }
         : undefined,
   };

@@ -1,5 +1,5 @@
 import ImagePlaceholder from "./ImagePlaceholder";
-import type { GalleryImage, Project, ProjectStat } from "@/data/projects";
+import { WIDE_RATIO, type CaseStudyPhoto, type GalleryImage, type Project, type ProjectStat } from "@/data/projects";
 
 export function ProblemSolution({
   problemLabel,
@@ -26,7 +26,31 @@ export function ProblemSolution({
   );
 }
 
+const isWide = (image: GalleryImage) => Boolean(image.src && image.aspectRatio && image.aspectRatio >= WIDE_RATIO);
+
 export function Gallery({ images }: { images: GalleryImage[] }) {
+  // Slide decks: show every slide whole at its own shape, two across, so the text stays readable.
+  if (images.length > 0 && images.every(isWide)) {
+    return (
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {images.map((image, i) => (
+          <figure key={`${i}-${image.label}`} className="bento m-0 overflow-hidden bg-white">
+            <img
+              src={image.src}
+              alt={image.label}
+              loading="lazy"
+              draggable={false}
+              className="block h-auto w-full object-contain"
+              style={{ aspectRatio: String(image.aspectRatio) }}
+            />
+            <figcaption className="border-t border-ink-lighter px-4 py-3 text-[13px] text-ink-dark">
+              {image.label}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       {images.map((image) => (
@@ -42,16 +66,42 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
   );
 }
 
-export function ResultsStrip({ results }: { results: ProjectStat[] }) {
+export function PhotoStrip({ photos }: { photos: CaseStudyPhoto[] }) {
+  // Columns let portrait and landscape photos sit together at their own shapes, without cropping.
+  return (
+    <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+      {photos.map((photo) => (
+        <figure key={photo.src} className="bento m-0 mb-6 break-inside-avoid overflow-hidden bg-cream">
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            className={`block w-full object-cover ${photo.orientation === "portrait" ? "aspect-[3/4]" : "aspect-[4/3]"}`}
+          />
+          {photo.caption && <figcaption className="px-4 py-3 text-[13px] text-ink-dark">{photo.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  );
+}
+
+export function ResultsStrip({ results, note }: { results: ProjectStat[]; note?: string }) {
+  // Up to three stats keep the original single row; four or more wrap two across, then four.
+  const columns = results.length > 3 ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-3";
   return (
     <section className="mt-6">
-      <div className="bento grid grid-cols-1 gap-6 bg-brand-base p-10 text-center text-white sm:grid-cols-3">
+      <div className={`bento grid ${columns} gap-6 bg-brand-base p-10 text-center text-white`}>
         {results.map((stat) => (
           <div key={stat.label}>
             <div className="hd text-[34px] text-sun-base">{stat.value}</div>
             <div className="mt-1 text-[13px] text-brand-lighter">{stat.label}</div>
           </div>
         ))}
+        {note && (
+          <p className="col-span-full m-0 border-t border-brand-light pt-5 text-[13px] leading-relaxed text-brand-lighter">
+            {note}
+          </p>
+        )}
       </div>
     </section>
   );
