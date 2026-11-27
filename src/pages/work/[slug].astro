@@ -3,7 +3,8 @@ import Layout from "@/layouts/Layout.astro";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import TagPill from "@/components/TagPill";
 import SectionRail from "@/components/SectionRail.astro";
-import { ProblemSolution, Gallery, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
+import PortableText from "@/components/PortableText";
+import { ProblemSolution, Gallery, PhotoStrip, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
 import { loadProjects } from "@/data/work";
 
 // Rendered on each request so projects added or edited in Sanity show up right away.
@@ -16,6 +17,15 @@ const project = allProjects[index];
 const previous = allProjects[index - 1];
 const next = allProjects[index + 1];
 const cs = project.caseStudy;
+
+// Sections after Problem / Solution are numbered in order, starting at 02, skipping any that are empty.
+const hasBody = Boolean(cs?.body?.length);
+const hasPhotos = Boolean(cs?.photos?.length);
+let sectionCount = 1;
+const nextNumber = () => String(++sectionCount).padStart(2, "0");
+const bodyNumber = hasBody ? nextNumber() : "";
+const photosNumber = hasPhotos ? nextNumber() : "";
+const processNumber = nextNumber();
 ---
 
 <Layout title={project.title} description={cs?.description ?? project.shortDescription}>
@@ -23,13 +33,15 @@ const cs = project.caseStudy;
 
   <!-- HERO -->
   <section class="mt-4">
-    <div class="bento flex flex-col gap-4 bg-cream p-11">
+    <div class="bento flex flex-col gap-4 bg-cream p-7 sm:p-11">
       {project.tags.length > 0 && (
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
           {project.tags.map((tag) => <TagPill label={tag.label} tone={tag.tone} />)}
         </div>
       )}
-      <div class="hd text-[64px] leading-[.9] tracking-[-.02em]">{project.title}</div>
+      {cs?.eyebrow && <div class="text-xs font-bold tracking-[.14em] text-sun-dark uppercase">{cs.eyebrow}</div>}
+      <h1 class="hd m-0 text-[40px] leading-[.9] tracking-[-.02em] break-words sm:text-[64px]">{project.title}</h1>
+      {cs?.subtitle && <p class="m-0 text-xl font-bold leading-snug text-brand-base sm:text-2xl">{cs.subtitle}</p>}
       <p class="m-0 max-w-[640px] text-[17px] leading-relaxed text-ink-dark">
         {cs?.description ?? project.shortDescription}
       </p>
@@ -39,10 +51,10 @@ const cs = project.caseStudy;
         <img
           src={cs.heroImage}
           alt={cs.heroImageLabel}
-          class="h-[480px] w-full object-cover"
+          class="aspect-video w-full object-cover md:aspect-auto md:h-[480px]"
         />
       ) : (
-        <ImagePlaceholder label={cs?.heroImageLabel ?? project.imageLabel} className="h-[480px]" />
+        <ImagePlaceholder label={cs?.heroImageLabel ?? project.imageLabel} className="h-[280px] md:h-[480px]" />
       )}
     </div>
   </section>
@@ -55,12 +67,31 @@ const cs = project.caseStudy;
         solutionLabel={cs.solutionLabel}
         solution={cs.solution}
       />
-      <section class="mt-6">
-        <SectionRail label="02 / PROCESS" variant="sub" />
-        <div class="hd mb-5 text-[40px] leading-[.92]">Process &amp; screens</div>
-        <Gallery images={cs.gallery} />
-      </section>
-      <ResultsStrip results={cs.results} />
+      {hasBody && (
+        <section class="mt-6">
+          <SectionRail label={`${bodyNumber} / STORY`} variant="sub" />
+          <div class="bento bg-white p-7 sm:p-11">
+            <div class="max-w-[720px]">
+              <PortableText value={cs.body} />
+            </div>
+          </div>
+        </section>
+      )}
+      {hasPhotos && (
+        <section class="mt-6">
+          <SectionRail label={`${photosNumber} / IN THE ROOM`} variant="sub" />
+          <div class="hd mb-5 text-[32px] leading-[.92] sm:text-[40px]">Photos</div>
+          <PhotoStrip photos={cs.photos!} />
+        </section>
+      )}
+      {cs.gallery.length > 0 && (
+        <section class="mt-6">
+          <SectionRail label={`${processNumber} / PROCESS`} variant="sub" />
+          <div class="hd mb-5 text-[32px] leading-[.92] sm:text-[40px]">{cs.galleryHeading ?? "Process & screens"}</div>
+          <Gallery images={cs.gallery} />
+        </section>
+      )}
+      {cs.results.length > 0 && <ResultsStrip results={cs.results} note={cs.resultsNote} />}
     </>
   )}
 
