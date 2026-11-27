@@ -67,7 +67,28 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
 }
 
 export function PhotoStrip({ photos }: { photos: CaseStudyPhoto[] }) {
-  // Columns let portrait and landscape photos sit together at their own shapes, without cropping.
+  // All landscape: an even grid. On wide screens the first one or two rows use larger tiles,
+  // so every row is full; on tablets an odd count lets the first photo span the row.
+  if (photos.every((photo) => photo.orientation === "landscape")) {
+    const n = photos.length;
+    const wideCount = n % 3 === 2 ? 2 : n % 3 === 1 ? 4 : 0;
+    return (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
+        {photos.map((photo, i) => (
+          <figure
+            key={photo.src}
+            className={`bento m-0 overflow-hidden bg-cream ${i < wideCount ? "lg:col-span-3" : "lg:col-span-2"} ${
+              n % 2 === 1 && i === 0 ? "sm:col-span-2" : ""
+            }`}
+          >
+            <img src={photo.src} alt={photo.alt} loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+            {photo.caption && <figcaption className="px-4 py-3 text-[13px] text-ink-dark">{photo.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    );
+  }
+  // Mixed or portrait: columns let each photo keep its own shape, without cropping.
   return (
     <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
       {photos.map((photo) => (
@@ -93,7 +114,7 @@ export function ResultsStrip({ results, note }: { results: ProjectStat[]; note?:
       <div className={`bento grid ${columns} gap-6 bg-brand-base p-10 text-center text-white`}>
         {results.map((stat) => (
           <div key={stat.label}>
-            <div className="hd text-[34px] text-sun-base">{stat.value}</div>
+            <div className="hd text-[34px] normal-case text-sun-base">{stat.value}</div>
             <div className="mt-1 text-[13px] text-brand-lighter">{stat.label}</div>
           </div>
         ))}
