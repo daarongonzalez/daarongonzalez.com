@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import TagPill from "@/components/TagPill";
 import SectionRail from "@/components/SectionRail.astro";
-import PortableText from "@/components/PortableText";
+import PortableText, { BodyImage, type BodyImageValue } from "@/components/PortableText";
 import { ProblemSolution, Gallery, PhotoStrip, ResultsStrip, PrevNextNav } from "@/components/CaseStudySections";
 import { loadProjects } from "@/data/work";
 
@@ -20,6 +20,20 @@ const cs = project.caseStudy;
 
 // Sections after Problem / Solution are numbered in order, starting at 02, skipping any that are empty.
 const hasBody = Boolean(cs?.body?.length);
+
+// The story is split at its image blocks: text runs become cards, and each image sits
+// between them at full width, so a long write-up reads in sections.
+type StoryPart = { kind: "text"; blocks: unknown[] } | { kind: "image"; image: BodyImageValue };
+const storyParts: StoryPart[] = [];
+for (const item of (cs?.body ?? []) as { _type?: string }[]) {
+  if (item._type === "image") {
+    storyParts.push({ kind: "image", image: item as BodyImageValue });
+  } else {
+    const last = storyParts[storyParts.length - 1];
+    if (last?.kind === "text") last.blocks.push(item);
+    else storyParts.push({ kind: "text", blocks: [item] });
+  }
+}
 const hasPhotos = Boolean(cs?.photos?.length);
 let sectionCount = 1;
 const nextNumber = () => String(++sectionCount).padStart(2, "0");
@@ -70,10 +84,18 @@ const processNumber = nextNumber();
       {hasBody && (
         <section class="mt-6">
           <SectionRail label={`${bodyNumber} / STORY`} variant="sub" />
-          <div class="bento bg-white p-7 sm:p-11">
-            <div class="max-w-[720px]">
-              <PortableText value={cs.body} />
-            </div>
+          <div class="flex flex-col gap-6">
+            {storyParts.map((part) =>
+              part.kind === "image" ? (
+                <BodyImage value={part.image} />
+              ) : (
+                <div class="bento bg-white p-7 sm:p-11 [&>div>*:first-child]:mt-0 [&>div>*:last-child]:mb-0">
+                  <div class="max-w-[720px]">
+                    <PortableText value={part.blocks} />
+                  </div>
+                </div>
+              ),
+            )}
           </div>
         </section>
       )}
